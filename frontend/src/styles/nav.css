@@ -1,0 +1,208 @@
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.logo-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-title);
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.brand-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: rgba(248, 250, 252, 0.7);
+}
+
+.navbar-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.navbar-link {
+  color: #0f172a;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.navbar-link:hover {
+  background: #0f172a;
+  color: #fff;
+}
+
+.navbar-link.active {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: transparent;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  gap: 18px;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.school-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #22c55e);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-title);
+}
+
+.school-name {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.school-tag {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.student-name {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.student-meta {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.pill.subtle {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.icon-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #f8fafc;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.icon-button svg {
+  width: 20px;
+  height: 20px;
+  fill: #0f172a;
+}
+
+.icon-button:hover {
+  transform: translateY(-2px);
+}
+
+.profile-menu {
+  position: relative;
+}
+
+.profile-menu summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.profile-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  min-width: 180px;
+}
+
+.profile-dropdown a {
+  color: #0f172a;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.profile-dropdown a:hover {
+  background: #fef3c7;
+}

@@ -1,0 +1,31 @@
+@media (max-width: 1100px) {
+  .topbar {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    width: 100%;
+  }
+
+  .student-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .weekly-row {
+    grid-template-columns: 1fr;
+  }
+
+  .weekly-row span {
+    display: flex;
+    justify-content: space-between;
+  }
+}

@@ -26,17 +26,29 @@ export const notices = [
   {
     title: 'Science Fair Registration',
     date: '24 Jan 2026',
+    category: 'General',
     preview: 'Submit your team names to the class teacher before 28 Jan.',
+    body:
+      'Students participating in the science fair should form teams of 2-3 members. Submit your project title, mentor name, and required lab materials to the class teacher by 28 Jan.',
+    attachments: ['ScienceFairGuidelines.pdf'],
   },
   {
     title: 'Semester Final Schedule',
     date: '22 Jan 2026',
+    category: 'Exam',
     preview: 'Final exams begin from 5 Feb. See the full routine for details.',
+    body:
+      'The semester finals will begin from 5 Feb. Please review the exam routine, arrive 20 minutes early, and bring your admit card.',
+    attachments: ['FinalExamRoutine.pdf'],
   },
   {
     title: 'Library Day',
     date: '21 Jan 2026',
+    category: 'Event',
     preview: 'Return overdue books by this Thursday to avoid late fees.',
+    body:
+      'Library day will be held this Thursday. Please return overdue books by 3 PM to avoid late fees.',
+    attachments: [],
   },
 ]
 

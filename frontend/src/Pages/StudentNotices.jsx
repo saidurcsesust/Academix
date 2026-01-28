@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import Card from '../Components/Card'
 import PageHeader from '../Components/PageHeader'
 
 export default function StudentNotices({ notices }) {
+  const [activeNotice, setActiveNotice] = useState(null)
+
   return (
     <section className="page" id="notices">
       <PageHeader
@@ -9,9 +12,19 @@ export default function StudentNotices({ notices }) {
         subtitle="Search and filter important announcements."
         actions={(
           <div className="filter-row">
-            <button className="filter-chip" type="button">Search notice...</button>
-            <button className="filter-chip" type="button">General</button>
-            <button className="filter-chip" type="button">Jan 2026</button>
+            <input
+              className="filter-input"
+              type="search"
+              placeholder="Search notice..."
+              aria-label="Search notice"
+            />
+            <select className="filter-select" aria-label="Filter by category" defaultValue="General">
+              <option value="General">General</option>
+              <option value="Exam">Exam</option>
+              <option value="Holiday">Holiday</option>
+              <option value="Fee">Fee</option>
+              <option value="Event">Event</option>
+            </select>
           </div>
         )}
       />
@@ -21,23 +34,59 @@ export default function StudentNotices({ notices }) {
           <div className="notice-row" key={`full-${notice.title}`}>
             <div>
               <p className="notice-title">{notice.title}</p>
-              <p className="notice-date">{notice.date}</p>
+              <p className="notice-date">
+                {notice.date}
+                <span className={`notice-category ${notice.category.toLowerCase()}`}>
+                  {notice.category}
+                </span>
+              </p>
               <p className="notice-preview">{notice.preview}</p>
             </div>
-            <button className="secondary" type="button">Read More</button>
+            <button className="secondary" type="button" onClick={() => setActiveNotice(notice)}>
+              Read More
+            </button>
           </div>
         ))}
       </Card>
-      <Card className="notice-detail">
-        <h2>Notice Details</h2>
-        <p className="notice-title">Science Fair Registration</p>
-        <p className="notice-date">24 Jan 2026 • Category: General</p>
-        <p className="notice-preview">
-          Students participating in the science fair should form teams of 2-3 members.
-          Submit your project title, mentor name, and required lab materials.
-        </p>
-        <p className="attachment">Attachments: ScienceFairGuidelines.pdf</p>
-      </Card>
+
+      {activeNotice && (
+        <div className="modal-overlay" role="dialog" aria-modal="true">
+          <div className="modal">
+            <div className="modal-header">
+              <div>
+                <h2>Notice Details</h2>
+                <p className="notice-date">
+                  {activeNotice.date} • Category: {activeNotice.category}
+                </p>
+              </div>
+              <button
+                className="icon-button close-button"
+                type="button"
+                aria-label="Close notice details"
+                onClick={() => setActiveNotice(null)}
+              >
+                X
+              </button>
+            </div>
+            <p className="notice-title">{activeNotice.title}</p>
+            <p className="notice-preview">{activeNotice.body}</p>
+            {activeNotice.attachments && activeNotice.attachments.length > 0 ? (
+              <div className="attachment-list">
+                <p className="attachment">Attachments</p>
+                <ul>
+                  {activeNotice.attachments.map((file) => (
+                    <li key={file}>
+                      <a className="text-link" href={`/assets/${file}`}>{file}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p className="attachment">Attachments: None</p>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   )
 }
