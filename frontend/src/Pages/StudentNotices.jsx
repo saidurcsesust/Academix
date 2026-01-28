@@ -54,9 +54,12 @@ export default function StudentNotices({ notices }) {
           <div className="modal">
             <div className="modal-header">
               <div>
-                <h2>Notice Details</h2>
-                <p className="notice-date">
-                  {activeNotice.date} • Category: {activeNotice.category}
+                <h2>{activeNotice.title}</h2>
+                <p className="notice-date modal-date">
+                  {activeNotice.date}
+                  <span className={`notice-category ${activeNotice.category.toLowerCase()}`}>
+                    {activeNotice.category}
+                  </span>
                 </p>
               </div>
               <button
@@ -68,7 +71,6 @@ export default function StudentNotices({ notices }) {
                 X
               </button>
             </div>
-            <p className="notice-title">{activeNotice.title}</p>
             <p className="notice-preview">{activeNotice.body}</p>
             {activeNotice.attachments && activeNotice.attachments.length > 0 ? (
               <div className="attachment-list">

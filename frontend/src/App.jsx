@@ -5,7 +5,8 @@ import {
   exams,
   faculty,
   notices,
-  results,
+  resultsBySemester,
+  resultsSummary,
   routineItems,
   student,
   weeklyRoutine,
@@ -42,7 +43,8 @@ function App() {
             alumni={alumni}
             faculty={faculty}
             notices={notices}
-            results={results}
+            resultsSummary={resultsSummary}
+            resultsBySemester={resultsBySemester}
             routineItems={routineItems}
             student={student}
             todayLabel={todayLabel}

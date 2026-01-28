@@ -103,18 +103,94 @@ export const attendanceBySemester = {
   },
 }
 
-export const results = {
+export const resultsSummary = {
   exam: 'Quiz-2',
   total: 87,
   grade: 'A',
   publishDate: '18 Jan 2026',
   gpa: '4.0',
   position: 6,
-  marks: [
-    { subject: 'Mathematics', marks: 28, highest: 30, pass: 12, grade: 'A+' },
-    { subject: 'Science', marks: 27, highest: 30, pass: 12, grade: 'A' },
-    { subject: 'English', marks: 18, highest: 20, pass: 8, grade: 'A' },
-    { subject: 'History', marks: 14, highest: 20, pass: 8, grade: 'B+' },
+}
+
+export const resultsBySemester = {
+  session: '2026',
+  semesters: [
+    {
+      id: 'semester-1',
+      label: 'Semester 1',
+      period: 'Jan - Jun',
+      publishStatus: 'Published',
+      publishDate: '05 Jul 2026',
+      attendancePercent: 92,
+      subjects: [
+        {
+          subject: 'Mathematics',
+          classTests: [26, 28],
+          semesterFinal: 82,
+          highest: 95,
+          pass: 40,
+        },
+        {
+          subject: 'Science',
+          classTests: [24, 27],
+          semesterFinal: 79,
+          highest: 92,
+          pass: 40,
+        },
+        {
+          subject: 'English',
+          classTests: [22, 25],
+          semesterFinal: 76,
+          highest: 90,
+          pass: 40,
+        },
+        {
+          subject: 'History',
+          classTests: [20, 23],
+          semesterFinal: 72,
+          highest: 88,
+          pass: 40,
+        },
+      ],
+    },
+    {
+      id: 'semester-2',
+      label: 'Semester 2',
+      period: 'Jul - Dec',
+      publishStatus: 'Pending',
+      publishDate: '10 Jan 2027',
+      attendancePercent: 89,
+      subjects: [
+        {
+          subject: 'Mathematics',
+          classTests: [27, 26],
+          semesterFinal: 80,
+          highest: 94,
+          pass: 40,
+        },
+        {
+          subject: 'Science',
+          classTests: [25, 26],
+          semesterFinal: 81,
+          highest: 93,
+          pass: 40,
+        },
+        {
+          subject: 'English',
+          classTests: [23, 24],
+          semesterFinal: 78,
+          highest: 90,
+          pass: 40,
+        },
+        {
+          subject: 'History',
+          classTests: [21, 22],
+          semesterFinal: 73,
+          highest: 87,
+          pass: 40,
+        },
+      ],
+    },
   ],
 }
 

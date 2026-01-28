@@ -26,7 +26,8 @@ export function AppRouter({
   faculty,
   exams,
   notices,
-  results,
+  resultsSummary,
+  resultsBySemester,
   routineItems,
   student,
   todayLabel,
@@ -50,7 +51,7 @@ export function AppRouter({
         notices={notices}
         nextExam={nextExam}
         exams={exams}
-        results={results}
+        results={resultsSummary}
       />
     ),
     '/student/routine': (
@@ -60,7 +61,7 @@ export function AppRouter({
       <StudentAttendance attendanceStats={attendanceStats} calendarDays={calendarDays} />
     ),
     '/student/exams': <StudentExams exams={exams} />,
-    '/student/results': <StudentResults results={results} />,
+    '/student/results': <StudentResults results={resultsBySemester} />,
     '/student/notices': <StudentNotices notices={notices} />,
     '/student/faculty': <StudentFaculty faculty={faculty} />,
     '/student/alumni': <StudentAlumni alumni={alumni} />,
