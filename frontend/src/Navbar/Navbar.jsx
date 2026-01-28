@@ -5,7 +5,6 @@ export default function Navbar({ navItems, currentRoute, student }) {
         <div className="school-badge">SA</div>
         <div>
           <p className="school-name">Springfield Academy</p>
-          <p className="school-tag">Learning with purpose</p>
         </div>
       </div>
       <div className="navbar-links">

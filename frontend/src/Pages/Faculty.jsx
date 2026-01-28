@@ -7,13 +7,6 @@ export default function StudentFaculty({ faculty }) {
       <PageHeader
         title="Faculty Directory"
         subtitle="Reach out to teachers and check their office hours."
-        actions={(
-          <div className="filter-row">
-            <button className="filter-chip" type="button">All Departments</button>
-            <button className="filter-chip" type="button">Science</button>
-            <button className="filter-chip" type="button">Math</button>
-          </div>
-        )}
       />
 
       <div className="faculty-grid">
@@ -30,7 +23,6 @@ export default function StudentFaculty({ faculty }) {
                 <p className="faculty-contact">{member.email}</p>
                 <p className="faculty-contact">{member.phone}</p>
               </div>
-              <p className="faculty-office">{member.office}</p>
             </div>
           </Card>
         ))}
