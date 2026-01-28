@@ -14,6 +14,17 @@ export default function StudentRoutine({ routineItems, weeklyRoutine }) {
   const dailyLabel = formatDate(dailyDate)
   const dailyWeekend = isWeekend(dailyDate)
   const dailyRoutine = dailyWeekend ? [] : routineItems
+  const days = [
+    { label: 'Sunday', key: 'Sun' },
+    { label: 'Monday', key: 'Mon' },
+    { label: 'Tuesday', key: 'Tue' },
+    { label: 'Wednesday', key: 'Wed' },
+    { label: 'Thursday', key: 'Thu' },
+    { label: 'Friday', key: 'Fri' },
+    { label: 'Saturday', key: 'Sat' },
+  ]
+  const periods = weeklyRoutine.map((row) => row.period)
+  const isWeekendDay = (key) => key === 'Fri' || key === 'Sat'
 
   return (
     <section className="page" id="routine">
@@ -64,27 +75,24 @@ export default function StudentRoutine({ routineItems, weeklyRoutine }) {
         </CardHeader>
         <div className="weekly-table">
           <div className="weekly-row header">
-            <span>Period</span>
-            <span>Sunday</span>
-            <span>Monday</span>
-            <span>Tuesday</span>
-            <span>Wednesday</span>
-            <span>Thursday</span>
-            <span className="weekend">Friday</span>
-            <span className="weekend">Saturday</span>
+            <span>Day</span>
+            {periods.map((period) => (
+              <span key={period}>{period}</span>
+            ))}
           </div>
-          {weeklyRoutine.map((row) => (
-            <div className="weekly-row" key={row.period}>
-              <span className="period">{row.period}</span>
-              <span>{row.Sun}</span>
-              <span>{row.Mon}</span>
-              <span>{row.Tue}</span>
-              <span>{row.Wed}</span>
-              <span>{row.Thu}</span>
-              <span className="weekend">Weekend</span>
-              <span className="weekend">Weekend</span>
-            </div>
-          ))}
+          {days.map((day) => {
+            const weekendDay = isWeekendDay(day.key)
+            return (
+              <div className="weekly-row" key={day.key}>
+                <span className={`period${weekendDay ? ' weekend' : ''}`}>{day.label}</span>
+                {weeklyRoutine.map((row) => (
+                  <span className={weekendDay ? 'weekend' : ''} key={`${day.key}-${row.period}`}>
+                    {weekendDay ? 'Weekend' : row[day.key]}
+                  </span>
+                ))}
+              </div>
+            )
+          })}
         </div>
       </Card>
     </section>

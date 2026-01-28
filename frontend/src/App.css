@@ -1,18 +1,9 @@
 .app-shell {
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  background: var(--app-bg);
-  color: var(--text-primary);
-}
-
-.sidebar {
-  padding: 28px 22px;
-  background: var(--sidebar-bg);
-  color: #f8fafc;
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  background: var(--app-bg);
+  color: var(--text-primary);
 }
 
 .brand {
@@ -45,37 +36,33 @@
   color: rgba(248, 250, 252, 0.7);
 }
 
-.nav {
+.navbar-links {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.nav-item {
-  color: rgba(248, 250, 252, 0.8);
+.navbar-link {
+  color: #0f172a;
   text-decoration: none;
-  padding: 10px 14px;
-  border-radius: 12px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  font-size: 0.9rem;
+  font-weight: 600;
   transition: all 0.2s ease;
-  font-size: 0.95rem;
 }
 
-.nav-item:hover {
-  background: rgba(248, 250, 252, 0.12);
+.navbar-link:hover {
+  background: #0f172a;
   color: #fff;
 }
 
-.nav-item.active {
+.navbar-link.active {
   background: #fef3c7;
-  color: #1f2937;
-  font-weight: 700;
-}
-
-.sidebar-card {
-  margin-top: auto;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 16px;
+  color: #92400e;
+  border-color: transparent;
 }
 
 .small-title {
@@ -117,6 +104,7 @@
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  gap: 18px;
 }
 
 .topbar-left {
@@ -490,6 +478,15 @@
   cursor: pointer;
 }
 
+.filter-select {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
 .input-chip {
   border: 1px solid rgba(15, 23, 42, 0.1);
   background: #fff;
@@ -532,6 +529,8 @@
   gap: 4px;
   min-height: 70px;
   border: 1px solid rgba(15, 23, 42, 0.05);
+  text-align: left;
+  cursor: pointer;
 }
 
 .calendar-day.present {
@@ -546,6 +545,15 @@
   background: #e2e8f0;
 }
 
+.calendar-day.is-selected {
+  box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.2);
+}
+
+.calendar-day:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.6);
+  outline-offset: 2px;
+}
+
 .day-number {
   font-weight: 700;
 }
@@ -553,6 +561,25 @@
 .day-label {
   font-size: 0.8rem;
   color: #334155;
+}
+
+.attendance-detail {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px dashed rgba(15, 23, 42, 0.1);
+}
+
+.attendance-title {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+
+.attendance-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .footer-note {
@@ -646,6 +673,111 @@
   font-size: 0.9rem;
 }
 
+.alumni-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.alumni-card {
+  display: grid;
+  gap: 8px;
+}
+
+.alumni-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.alumni-name {
+  margin: 0;
+  font-weight: 700;
+}
+
+.alumni-meta {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.alumni-detail {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.alumni-contact {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #2563eb;
+}
+
+.faculty-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+}
+
+.faculty-card {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.faculty-photo {
+  width: 100%;
+  height: 128px;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.faculty-photo-wrap {
+  background: #e2e8f0;
+}
+
+.faculty-body {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px 12px;
+}
+
+.faculty-name {
+  margin: 0;
+  font-weight: 700;
+}
+
+.faculty-meta {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.faculty-detail {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.faculty-contact {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #2563eb;
+}
+
+.faculty-contacts {
+  display: grid;
+  gap: 4px;
+}
+
+.faculty-office {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
 .notice-board {
   display: grid;
   gap: 18px;
@@ -696,23 +828,8 @@
 }
 
 @media (max-width: 1100px) {
-  .app-shell {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .sidebar-card {
-    width: 100%;
-  }
-
-  .nav {
-    flex-direction: row;
-    flex-wrap: wrap;
+  .topbar {
+    position: static;
   }
 }
 
@@ -721,6 +838,10 @@
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
+  }
+
+  .navbar-links {
+    width: 100%;
   }
 
   .student-info {

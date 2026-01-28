@@ -44,40 +44,51 @@ export const exams = [
   {
     name: 'Class Test - 1',
     type: 'Class Test',
+    code: 'MATH-701',
     date: '30 Jan 2026',
     time: '09:00 AM',
     subject: 'Mathematics',
-    chapter: 'Algebra Basics',
+    syllabus: 'Algebra Basics',
     room: 'Room B-204',
     status: 'Upcoming',
   },
   {
     name: 'Quiz - 2',
     type: 'Quiz',
+    code: 'SCI-702',
     date: '02 Feb 2026',
     time: '11:00 AM',
     subject: 'Science',
-    chapter: 'Forces & Motion',
+    syllabus: 'Forces & Motion',
     room: 'Lab 1',
     status: 'Upcoming',
   },
   {
     name: 'Semester Final',
     type: 'Semester Final',
+    code: 'ENG-703',
     date: '05 Feb 2026',
     time: '09:00 AM',
     subject: 'English',
-    chapter: 'Full Syllabus',
+    syllabus: 'Full Syllabus',
     room: 'Hall A',
     status: 'Upcoming',
   },
 ]
 
-export const attendanceStats = {
-  present: 18,
-  absent: 2,
-  total: 20,
-  percent: 92,
+export const attendanceBySemester = {
+  'Jan-Jun': {
+    present: 86,
+    absent: 6,
+    total: 92,
+    percent: 93,
+  },
+  'Jul-Dec': {
+    present: 78,
+    absent: 10,
+    total: 88,
+    percent: 89,
+  },
 }
 
 export const results = {
@@ -94,3 +105,66 @@ export const results = {
     { subject: 'History', marks: 14, highest: 20, pass: 8, grade: 'B+' },
   ],
 }
+
+export const alumni = [
+  {
+    name: 'Nusrat Karim',
+    gradYear: 2022,
+    major: 'Computer Science',
+    currentRole: 'Software Engineer',
+    organization: 'Vertex Labs',
+    location: 'Dhaka, BD',
+    email: 'nusrat.karim@vertexlabs.com',
+  },
+  {
+    name: 'Raihan Chowdhury',
+    gradYear: 2021,
+    major: 'Business Administration',
+    currentRole: 'Marketing Analyst',
+    organization: 'Northwind Trading',
+    location: 'Chattogram, BD',
+    email: 'raihan.c@northwind.com',
+  },
+  {
+    name: 'Samira Farhan',
+    gradYear: 2020,
+    major: 'Biomedical Science',
+    currentRole: 'Research Associate',
+    organization: 'Apollo Research Center',
+    location: 'Khulna, BD',
+    email: 'samira.farhan@apollo.org',
+  },
+]
+
+export const faculty = [
+  {
+    name: 'Dr. Rashed Mahmud',
+    department: 'Mathematics',
+    role: 'Senior Lecturer',
+    office: 'Block B • Room 210',
+    email: 'r.mahmud@springfield.edu',
+    phone: '+880 1712-345-678',
+    education: 'PhD in Applied Mathematics, BUET',
+    photo: '/faculty-rashed.svg',
+  },
+  {
+    name: 'Ms. Safa Ali',
+    department: 'English',
+    role: 'Assistant Professor',
+    office: 'Block A • Room 105',
+    email: 's.ali@springfield.edu',
+    phone: '+880 1811-221-445',
+    education: 'MA in English Literature, DU',
+    photo: '/faculty-safa.svg',
+  },
+  {
+    name: 'Mr. Hasan Rafi',
+    department: 'Science',
+    role: 'Lab Instructor',
+    office: 'Lab 1',
+    email: 'h.rafi@springfield.edu',
+    phone: '+880 1915-789-302',
+    education: 'BSc in Chemistry, CU',
+    photo: '/faculty-hasan.svg',
+  },
+]

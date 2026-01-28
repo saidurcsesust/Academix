@@ -34,6 +34,13 @@ export const buildAttendanceDays = (date) => {
   const days = []
   const year = date.getFullYear()
   const month = date.getMonth()
+  const notes = {
+    3: 'Submitted late due to clinic visit.',
+    8: 'Morning assembly duty.',
+    12: 'Absent - family event.',
+    18: 'Sports practice overlap.',
+    24: 'Attended remedial class.',
+  }
   for (let i = 1; i <= 30; i += 1) {
     const current = new Date(year, month, i)
     const weekend = isWeekend(current)
@@ -43,6 +50,7 @@ export const buildAttendanceDays = (date) => {
       label: i,
       day: current.toLocaleDateString('en-US', { weekday: 'short' }),
       status,
+      note: notes[i] || '',
     })
   }
   return days

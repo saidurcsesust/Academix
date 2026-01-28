@@ -1,14 +1,20 @@
 import StudentAttendance from '../Pages/StudentAttendance'
 import StudentDashboard from '../Pages/StudentDashboard'
+import StudentExams from '../Pages/StudentExams'
+import StudentAlumni from '../Pages/StudentAlumni'
 import StudentNotices from '../Pages/StudentNotices'
 import StudentResults from '../Pages/StudentResults'
 import StudentRoutine from '../Pages/StudentRoutine'
+import StudentFaculty from '../Pages/StudentFaculty'
 import { attendanceStatus } from '../utils/date'
 
 export const navItems = [
   { label: 'Dashboard', path: '/student/dashboard' },
   { label: 'Class Routine', path: '/student/routine' },
   { label: 'Attendance', path: '/student/attendance' },
+  { label: 'Upcoming Exams', path: '/student/exams' },
+  { label: 'Alumni', path: '/student/alumni' },
+  { label: 'Faculty', path: '/student/faculty' },
   { label: 'Results', path: '/student/results' },
   { label: 'Notices', path: '/student/notices' },
 ]
@@ -16,6 +22,9 @@ export const navItems = [
 export function AppRouter({
   attendanceStats,
   calendarDays,
+  alumni,
+  faculty,
+  exams,
   notices,
   results,
   routineItems,
@@ -40,6 +49,7 @@ export function AppRouter({
         todayRoutine={todayRoutine}
         notices={notices}
         nextExam={nextExam}
+        exams={exams}
         results={results}
       />
     ),
@@ -49,6 +59,9 @@ export function AppRouter({
     '/student/routine': (
       <StudentRoutine routineItems={routineItems} weeklyRoutine={weeklyRoutine} />
     ),
+    '/student/exams': <StudentExams exams={exams} />,
+    '/student/alumni': <StudentAlumni alumni={alumni} />,
+    '/student/faculty': <StudentFaculty faculty={faculty} />,
     '/student/notices': <StudentNotices notices={notices} />,
     '/student/results': <StudentResults results={results} />,
   }

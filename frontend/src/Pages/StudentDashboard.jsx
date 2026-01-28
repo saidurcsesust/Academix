@@ -14,10 +14,12 @@ export default function StudentDashboard({
   todayRoutine,
   notices,
   nextExam,
+  exams,
   results,
 }) {
   const latestResult = `${results.exam} • Total ${results.total}`
   const attendanceLabel = attendanceStatus(attendanceStats.percent)
+  const dashboardExams = exams.slice(0, 3)
 
   return (
     <section className="page" id="dashboard">
@@ -76,6 +78,30 @@ export default function StudentDashboard({
           </CardHeader>
           <NoticeList notices={notices} />
         </Card>
+      </div>
+
+      <div>
+        <CardHeader>
+          <h2>Upcoming Exams</h2>
+          <span className="card-note">Showing {dashboardExams.length} of {exams.length}</span>
+        </CardHeader>
+        <div className="exam-grid">
+          {dashboardExams.map((exam) => (
+            <Card className="exam-card" key={`${exam.code}-${exam.date}`}>
+              <div className="exam-header">
+                <div>
+                  <h3 className="exam-title">{exam.subject}</h3>
+                  <p className="exam-meta">{exam.code} • {exam.type}</p>
+                </div>
+                <span className="status-pill upcoming">{exam.status}</span>
+              </div>
+              <p className="exam-time">{exam.date}</p>
+              <p className="exam-detail">Exam Hour: {exam.time}</p>
+              <p className="exam-detail">Syllabus: {exam.syllabus}</p>
+              <p className="exam-detail">Room: {exam.room}</p>
+            </Card>
+          ))}
+        </div>
       </div>
 
       <div className="quick-links">
