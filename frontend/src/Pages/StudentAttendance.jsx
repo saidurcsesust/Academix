@@ -1,24 +1,57 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Card from '../Components/Card'
 import CardHeader from '../Components/CardHeader'
 import PageHeader from '../Components/PageHeader'
 import SummaryCard from '../Components/SummaryCard'
+import { buildAttendanceDays } from '../utils/date'
 
-export default function StudentAttendance({ attendanceStats, calendarDays }) {
+export default function StudentAttendance({ attendanceStats }) {
   const monthOptions = useMemo(
-    () => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    () => [
+      { label: 'Jan', value: 0 },
+      { label: 'Feb', value: 1 },
+      { label: 'Mar', value: 2 },
+      { label: 'Apr', value: 3 },
+      { label: 'May', value: 4 },
+      { label: 'Jun', value: 5 },
+      { label: 'Jul', value: 6 },
+      { label: 'Aug', value: 7 },
+      { label: 'Sep', value: 8 },
+      { label: 'Oct', value: 9 },
+      { label: 'Nov', value: 10 },
+      { label: 'Dec', value: 11 },
+    ],
     [],
   )
-  const yearOptions = useMemo(() => ['2025', '2026', '2027'], [])
+  const today = new Date()
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth())
+  const selectedYear = today.getFullYear()
+  const todayKey = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()
+  const calendarDays = useMemo(() => {
+    const days = buildAttendanceDays(new Date(selectedYear, selectedMonth, 1))
+    return days.map((day) => {
+      const dateValue = new Date(selectedYear, selectedMonth, day.label)
+      const isFuture = dateValue.getTime() > todayKey
+      return {
+        ...day,
+        status: isFuture ? 'pending' : day.status,
+      }
+    })
+  }, [selectedMonth, selectedYear, todayKey])
   const initialDay = useMemo(
     () => calendarDays.find((day) => day.status !== 'weekend') || calendarDays[0],
     [calendarDays],
   )
   const [selectedDay, setSelectedDay] = useState(initialDay)
 
+  useEffect(() => {
+    setSelectedDay(initialDay)
+  }, [initialDay])
+
   const statusLabel = (status) => {
     if (status === 'present') return 'Present'
     if (status === 'absent') return 'Absent'
+    if (status === 'pending') return 'Pending'
     return 'Weekend'
   }
 
@@ -29,14 +62,16 @@ export default function StudentAttendance({ attendanceStats, calendarDays }) {
         subtitle="Filter by month and year to view attendance."
         actions={(
           <div className="filter-row">
-            <select className="filter-select" aria-label="Select month" defaultValue="Jan">
+            <select
+              className="filter-select"
+              aria-label="Select month"
+              value={selectedMonth}
+              onChange={(event) => {
+                setSelectedMonth(Number(event.target.value))
+              }}
+            >
               {monthOptions.map((month) => (
-                <option key={month} value={month}>{month}</option>
-              ))}
-            </select>
-            <select className="filter-select" aria-label="Select year" defaultValue="2026">
-              {yearOptions.map((year) => (
-                <option key={year} value={year}>{year}</option>
+                <option key={month.label} value={month.value}>{month.label}</option>
               ))}
             </select>
           </div>
@@ -59,7 +94,9 @@ export default function StudentAttendance({ attendanceStats, calendarDays }) {
           {calendarDays.map((day) => (
             <button
               key={`${day.label}-${day.status}`}
-              className={`calendar-day ${day.status}${selectedDay?.label === day.label ? ' is-selected' : ''}`}
+              className={`calendar-day ${day.status}${
+                new Date(selectedYear, selectedMonth, day.label).getTime() > todayKey ? ' future' : ''
+              }${selectedDay?.label === day.label ? ' is-selected' : ''}`}
               type="button"
               onClick={() => setSelectedDay(day)}
             >

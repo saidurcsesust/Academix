@@ -21,7 +21,6 @@ export const navItems = [
 
 export function AppRouter({
   attendanceStats,
-  calendarDays,
   alumni,
   faculty,
   exams,
@@ -58,7 +57,7 @@ export function AppRouter({
       <StudentRoutine routineItems={routineItems} weeklyRoutine={weeklyRoutine} />
     ),
     '/student/attendance': (
-      <StudentAttendance attendanceStats={attendanceStats} calendarDays={calendarDays} />
+      <StudentAttendance attendanceStats={attendanceStats} />
     ),
     '/student/exams': <StudentExams exams={exams} />,
     '/student/results': <StudentResults results={resultsBySemester} />,

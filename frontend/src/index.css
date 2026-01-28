@@ -5,10 +5,17 @@
   font-weight: 400;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  --app-bg: #f8fafc;
-  --sidebar-bg: #0f172a;
-  --text-primary: #0f172a;
-  --text-muted: #64748b;
+  --bg: #f7f0e6;
+  --bg-accent: #f0e4d4;
+  --card: #fff8ef;
+  --text: #1f2a2e;
+  --muted: #566369;
+  --brand: #137a7f;
+  --brand-2: #f28f3b;
+  --app-bg: var(--bg);
+  --sidebar-bg: #1f2a2e;
+  --text-primary: var(--text);
+  --text-muted: var(--muted);
   --font-title: "Georgia", "Times New Roman", serif;
 }
 
@@ -19,7 +26,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(180deg, #fefce8 0%, #f8fafc 50%, #e0f2fe 100%);
+  background: linear-gradient(130deg, var(--bg), var(--bg-accent));
 }
 
 a {

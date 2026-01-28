@@ -34,6 +34,7 @@ export const buildAttendanceDays = (date) => {
   const days = []
   const year = date.getFullYear()
   const month = date.getMonth()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
   const notes = {
     3: 'Submitted late due to clinic visit.',
     8: 'Morning assembly duty.',
@@ -41,7 +42,7 @@ export const buildAttendanceDays = (date) => {
     18: 'Sports practice overlap.',
     24: 'Attended remedial class.',
   }
-  for (let i = 1; i <= 30; i += 1) {
+  for (let i = 1; i <= daysInMonth; i += 1) {
     const current = new Date(year, month, i)
     const weekend = isWeekend(current)
     const statusCycle = ['present', 'present', 'present', 'absent']

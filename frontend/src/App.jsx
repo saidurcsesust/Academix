@@ -11,15 +11,15 @@ import {
   student,
   weeklyRoutine,
 } from './data/studentData'
-import { buildAttendanceDays, formatDate, isWeekend } from './utils/date'
+import { formatDate, isWeekend } from './utils/date'
 import { AppRouter, navItems } from './routers/route'
 import Navbar from './Navbar/Navbar'
+import Sidebar from './Components/Sidebar'
 
 function App() {
   const today = new Date()
   const todayLabel = formatDate(today)
   const todayRoutine = isWeekend(today) ? [] : routineItems
-  const calendarDays = buildAttendanceDays(today)
   const nextExam = exams[0]
   const semesterKey = today.getMonth() <= 5 ? 'Jan-Jun' : 'Jul-Dec'
   const attendanceStats = attendanceBySemester[semesterKey]
@@ -29,17 +29,13 @@ function App() {
 
   return (
     <div className="app-shell">
+      <Sidebar navItems={navItems} currentRoute={currentRoute} student={student} />
       <div className="main">
-        <Navbar
-          navItems={navItems}
-          currentRoute={currentRoute}
-          student={student}
-        />
+        <Navbar />
 
         <main className="content">
           <AppRouter
             attendanceStats={attendanceStats}
-            calendarDays={calendarDays}
             alumni={alumni}
             faculty={faculty}
             notices={notices}

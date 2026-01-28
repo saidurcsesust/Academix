@@ -1,11 +1,13 @@
-export default function Sidebar({ navItems, currentRoute }) {
+export default function Sidebar({ navItems, currentRoute, student }) {
   return (
     <aside className="sidebar">
-      <div className="brand">
-        <div className="logo-mark">SA</div>
-        <div>
-          <p className="brand-title">Springfield Academy</p>
-          <p className="brand-subtitle">Student Area</p>
+      <div className="sidebar-student">
+        <div className="student-info">
+          <div>
+            <p className="student-name">{student.name}</p>
+            <p className="student-meta">Class {student.classLevel} • {student.section}</p>
+          </div>
+          <span className="pill">Roll {student.roll}</span>
         </div>
       </div>
       <nav className="nav">

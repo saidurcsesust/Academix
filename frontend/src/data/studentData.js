@@ -122,31 +122,47 @@ export const resultsBySemester = {
       publishStatus: 'Published',
       publishDate: '05 Jul 2026',
       attendancePercent: 92,
+      classTests: [
+        {
+          name: 'Class Test 1',
+          scores: {
+            Mathematics: 26,
+            Science: 24,
+            English: 22,
+            History: 20,
+          },
+        },
+        {
+          name: 'Class Test 2',
+          scores: {
+            Mathematics: 28,
+            Science: 27,
+            English: 25,
+            History: 23,
+          },
+        },
+      ],
       subjects: [
         {
           subject: 'Mathematics',
-          classTests: [26, 28],
           semesterFinal: 82,
           highest: 95,
           pass: 40,
         },
         {
           subject: 'Science',
-          classTests: [24, 27],
           semesterFinal: 79,
           highest: 92,
           pass: 40,
         },
         {
           subject: 'English',
-          classTests: [22, 25],
           semesterFinal: 76,
           highest: 90,
           pass: 40,
         },
         {
           subject: 'History',
-          classTests: [20, 23],
           semesterFinal: 72,
           highest: 88,
           pass: 40,
@@ -160,31 +176,47 @@ export const resultsBySemester = {
       publishStatus: 'Pending',
       publishDate: '10 Jan 2027',
       attendancePercent: 89,
+      classTests: [
+        {
+          name: 'Class Test 1',
+          scores: {
+            Mathematics: 27,
+            Science: 25,
+            English: 23,
+            History: 21,
+          },
+        },
+        {
+          name: 'Class Test 2',
+          scores: {
+            Mathematics: 26,
+            Science: 26,
+            English: 24,
+            History: 22,
+          },
+        },
+      ],
       subjects: [
         {
           subject: 'Mathematics',
-          classTests: [27, 26],
           semesterFinal: 80,
           highest: 94,
           pass: 40,
         },
         {
           subject: 'Science',
-          classTests: [25, 26],
           semesterFinal: 81,
           highest: 93,
           pass: 40,
         },
         {
           subject: 'English',
-          classTests: [23, 24],
           semesterFinal: 78,
           highest: 90,
           pass: 40,
         },
         {
           subject: 'History',
-          classTests: [21, 22],
           semesterFinal: 73,
           highest: 87,
           pass: 40,
