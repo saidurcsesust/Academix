@@ -104,11 +104,11 @@ export default function StudentDashboard({
         </div>
       </div>
 
-      <div className="quick-links">
+      {/* <div className="quick-links">
         <button type="button" className="primary">Attendance Details</button>
         <button type="button" className="secondary">View Results</button>
         <button type="button" className="secondary">Upcoming Exams</button>
-      </div>
+      </div> */}
     </section>
   )
 }
