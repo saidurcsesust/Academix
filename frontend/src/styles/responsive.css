@@ -117,21 +117,20 @@
   .topbar {
     grid-template-columns: auto 1fr auto;
     gap: 12px;
-    max-height: 62px;
+    min-height: 48px;
     padding: 8px 14px;
   }
 
   .topbar-center {
-    grid-column: 1 / -1;
-    text-align: left;
+    grid-column: 2;
+    text-align: center;
   }
 
   .topbar-right {
-    display: grid;
-    grid-template-columns: 1fr auto;
+    grid-column: 3;
+    display: flex;
     align-items: center;
-    row-gap: 8px;
-    column-gap: 12px;
+    justify-content: flex-end;
   }
 
   .topbar-student {
@@ -139,8 +138,7 @@
   }
 
   .topbar-right > .icon-button {
-    grid-column: 2;
-    justify-self: end;
+    justify-self: auto;
   }
 
   .student-info {
@@ -198,13 +196,29 @@
     display: none;
   }
 
+  .routine-table {
+    display: none;
+  }
+
+  .routine-cards {
+    display: flex;
+  }
+
+  .weekly-table {
+    display: none;
+  }
+
+  .weekly-cards {
+    display: flex;
+  }
+
   .drawer-panel {
     width: min(260px, 88vw);
-    padding: 18px 16px;
+    padding: 10px 16px;
   }
 
   .drawer-header {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .drawer-title {

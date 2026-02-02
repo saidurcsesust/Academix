@@ -60,8 +60,38 @@ export default function StudentAttendance({ attendanceStats }) {
       <PageHeader
         title="My Attendance"
         subtitle="Filter by month and year to view attendance."
-        actions={(
+      />
+
+      <Card className="attendance-summary">
+        <CardHeader>
+          <h2>Attendance Summary</h2>
+          <span className="card-note">This month</span>
+        </CardHeader>
+        <div className="attendance-summary-grid">
+          <div className="attendance-summary-item">
+            <p className="card-title">Present Days</p>
+            <p className="summary-value">{attendanceStats.present}</p>
+          </div>
+          <div className="attendance-summary-item">
+            <p className="card-title">Absent Days</p>
+            <p className="summary-value">{attendanceStats.absent}</p>
+          </div>
+          <div className="attendance-summary-item">
+            <p className="card-title">Total Days</p>
+            <p className="summary-value">{attendanceStats.total}</p>
+          </div>
+          <div className="attendance-summary-item">
+            <p className="card-title">Attendance %</p>
+            <p className="summary-value">{attendanceStats.percent}%</p>
+          </div>
+        </div>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <h2>Attendance Calendar</h2>
           <div className="filter-row">
+            <p className="card-note">Click a date to see details.</p>
             <select
               className="filter-select"
               aria-label="Select month"
@@ -75,20 +105,6 @@ export default function StudentAttendance({ attendanceStats }) {
               ))}
             </select>
           </div>
-        )}
-      />
-
-      <div className="summary-grid four">
-        <SummaryCard title="Present Days" value={attendanceStats.present} />
-        <SummaryCard title="Absent Days" value={attendanceStats.absent} />
-        <SummaryCard title="Total Days" value={attendanceStats.total} />
-        <SummaryCard title="Attendance %" value={`${attendanceStats.percent}%`} />
-      </div>
-
-      <Card>
-        <CardHeader>
-          <h2>Attendance Calendar</h2>
-          <p className="card-note">Click a date to see details.</p>
         </CardHeader>
         <div className="calendar-grid">
           {calendarDays.map((day) => (

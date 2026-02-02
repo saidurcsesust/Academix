@@ -72,7 +72,7 @@ export default function StudentExams({ exams }) {
             <div className="exam-header">
               <div>
                 <h3 className="exam-title">{exam.name}</h3>
-                <p className="exam-meta">{exam.type}</p>
+                {/* <p className="exam-meta">{exam.type}</p> */}
               </div>
               <span className={`status-pill ${status.toLowerCase()}`}>{status}</span>
             </div>

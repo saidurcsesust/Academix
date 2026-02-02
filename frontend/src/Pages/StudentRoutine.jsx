@@ -57,14 +57,13 @@ export default function StudentRoutine({ routineItems, weeklyRoutine }) {
         {dailyRoutine.length === 0 ? (
           <p className="empty-state">Weekend — No Classes</p>
         ) : <RoutineTable rows={dailyRoutine} />}
-        <p className="card-note">Selected date: {dailyLabel}</p>
+        {/* <p className="card-note">Selected date: {dailyLabel}</p> */}
       </Card>
 
       <Card>
         <CardHeader>
           <h2>Weekly View</h2>
           <label className="input-chip" htmlFor="routine-week">
-            <span>Week</span>
             <input
               id="routine-week"
               type="week"
@@ -90,6 +89,31 @@ export default function StudentRoutine({ routineItems, weeklyRoutine }) {
                     {weekendDay ? 'Weekend' : row[day.key]}
                   </span>
                 ))}
+              </div>
+            )
+          })}
+        </div>
+        <div className="weekly-cards">
+          {days.map((day) => {
+            const weekendDay = isWeekendDay(day.key)
+            return (
+              <div className="weekly-card" key={`card-${day.key}`}>
+                <div className="weekly-card-header">
+                  <p className="weekly-card-title">{day.label}</p>
+                  {weekendDay ? <span className="weekly-card-tag">Weekend</span> : null}
+                </div>
+                {!weekendDay ? (
+                  <div className="weekly-card-body">
+                    {weeklyRoutine.map((row) => (
+                      <div className="weekly-card-row" key={`card-${day.key}-${row.period}`}>
+                        <span className="weekly-card-period">{row.period}</span>
+                        <span className="weekly-card-subject">{row[day.key]}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="weekly-card-empty">No Classes</p>
+                )}
               </div>
             )
           })}

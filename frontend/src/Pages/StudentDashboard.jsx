@@ -37,13 +37,14 @@ export default function StudentDashboard({
 
       <div className="summary-grid">
         <SummaryCard
-          title="Today&apos;s Classes"
-          value={weekend ? 'Weekend' : `${todayRoutine.length} Classes Today`}
-          note="Friday & Saturday show Weekend — No Classes."
-        />
-        <SummaryCard
-          title="Attendance %"
-          value={`${attendanceStats.percent}%`}
+          title="Attendance"
+          value={(
+            <>
+              <span className="summary-line">
+                Attendance: {attendanceStats.percent}%
+              </span>
+            </>
+          )}
           status={{
             className: `status-pill ${attendanceLabel.toLowerCase()}`,
             label: attendanceLabel,
@@ -80,7 +81,7 @@ export default function StudentDashboard({
         </Card>
       </div>
 
-      <div>
+      {/* <div>
         <CardHeader>
           <h2>Upcoming Exams</h2>
           <span className="card-note">Showing {dashboardExams.length} of {exams.length}</span>
@@ -102,7 +103,7 @@ export default function StudentDashboard({
             </Card>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* <div className="quick-links">
         <button type="button" className="primary">Attendance Details</button>
