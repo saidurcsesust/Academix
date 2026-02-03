@@ -37,20 +37,6 @@ export default function StudentExams({ exams }) {
       <PageHeader
         title="Upcoming Exams"
         subtitle="Track upcoming assessments and plan your preparation."
-        actions={(
-          <div className="filter-row">
-            <button className="filter-chip" type="button">All</button>
-            <button className="filter-chip" type="button">Quiz</button>
-            <button className="filter-chip" type="button">Class Test</button>
-            <button className="filter-chip" type="button">Semester Final</button>
-            <select className="filter-select" aria-label="Filter by subject" defaultValue="">
-              <option value="">All Subjects</option>
-              {subjects.map((subject) => (
-                <option key={subject} value={subject}>{subject}</option>
-              ))}
-            </select>
-          </div>
-        )}
       />
 
       {nextExam && (

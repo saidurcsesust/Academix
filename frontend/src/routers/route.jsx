@@ -6,6 +6,11 @@ import StudentNotices from '../Pages/StudentNotices'
 import StudentResults from '../Pages/StudentResults'
 import StudentRoutine from '../Pages/StudentRoutine'
 import StudentFaculty from '../Pages/Faculty'
+import Login from '../Pages/Login'
+import AdminDashboard from '../Pages/AdminDashboard'
+import AdminUsers from '../Pages/AdminUsers'
+import AdminDirectory from '../Pages/AdminDirectory'
+import AdminUserDetails from '../Pages/AdminUserDetails'
 import { attendanceStatus } from '../utils/date'
 
 export const navItems = [
@@ -17,6 +22,12 @@ export const navItems = [
   { label: 'Notices', path: '/student/notices' },
   { label: 'Faculty', path: '/student/faculty' },
   { label: 'Alumni', path: '/student/alumni' },
+]
+
+export const adminNavItems = [
+  { label: 'Admin Dashboard', path: '/admin/dashboard' },
+  { label: 'User Management', path: '/admin/users' },
+  { label: 'User Directory', path: '/admin/directory' },
 ]
 
 export function AppRouter({
@@ -34,11 +45,15 @@ export function AppRouter({
   weeklyRoutine,
   nextExam,
   weekend,
-}) {
+  onLogin,
+  currentRoute,
+  apiBase = '/api',
+} = {}) {
   const pathname = window.location.pathname
-  const currentRoute = pathname === '/' ? '/student/dashboard' : pathname
+  const resolvedRoute = currentRoute || (pathname === '/' ? '/student/dashboard' : pathname)
 
   const pageMap = {
+    '/login': <Login onLogin={onLogin} apiBase={apiBase} />,
     '/student/dashboard': (
       <StudentDashboard
         todayLabel={todayLabel}
@@ -64,9 +79,23 @@ export function AppRouter({
     '/student/notices': <StudentNotices notices={notices} />,
     '/student/faculty': <StudentFaculty faculty={faculty} />,
     '/student/alumni': <StudentAlumni alumni={alumni} />,
+    '/admin/dashboard': (
+      <AdminDashboard
+        notices={notices}
+        exams={exams}
+        faculty={faculty}
+        attendanceStats={attendanceStats}
+        resultsSummary={resultsSummary}
+      />
+    ),
+    '/admin/users': <AdminUsers apiBase={apiBase} />,
+    '/admin/directory': <AdminDirectory apiBase={apiBase} />,
   }
 
-  const activePage = pageMap[currentRoute] || pageMap['/student/dashboard']
+  const isDetailsRoute = resolvedRoute.startsWith('/admin/directory/')
+  const activePage = isDetailsRoute
+    ? <AdminUserDetails apiBase={apiBase} />
+    : (pageMap[resolvedRoute] || pageMap['/student/dashboard'])
 
   return <>{activePage}</>
 }

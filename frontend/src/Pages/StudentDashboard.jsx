@@ -20,19 +20,24 @@ export default function StudentDashboard({
   const latestResult = `${results.exam} • Total ${results.total}`
   const attendanceLabel = attendanceStatus(attendanceStats.percent)
   const dashboardExams = exams.slice(0, 3)
+  const latestNotice = notices && notices.length ? notices[0] : null
 
   return (
     <section className="page" id="dashboard">
       <PageHeader
         title="Student Dashboard"
         subtitle={`Today: ${todayLabel}`}
-        actions={(
-          <div className="chip-row">
-            <span className="chip">Class {student.classLevel}</span>
-            <span className="chip">Section {student.section}</span>
-            <span className="chip">Student ID {student.id}</span>
+        actions={latestNotice ? (
+          <div className="notice-marquee-wrap">
+            <div className="notice-marquee" aria-label="Latest notice">
+              <span className="notice-marquee-track" aria-live="polite">
+                <span className="notice-marquee-text">
+                  {latestNotice.title} — {latestNotice.preview}
+                </span>
+              </span>
+            </div>
           </div>
-        )}
+        ) : null}
       />
 
       <div className="summary-grid">
@@ -81,35 +86,9 @@ export default function StudentDashboard({
         </Card>
       </div>
 
-      {/* <div>
-        <CardHeader>
-          <h2>Upcoming Exams</h2>
-          <span className="card-note">Showing {dashboardExams.length} of {exams.length}</span>
-        </CardHeader>
-        <div className="exam-grid">
-          {dashboardExams.map((exam) => (
-            <Card className="exam-card" key={`${exam.code}-${exam.date}`}>
-              <div className="exam-header">
-                <div>
-                  <h3 className="exam-title">{exam.subject}</h3>
-                  <p className="exam-meta">{exam.code} • {exam.type}</p>
-                </div>
-                <span className="status-pill upcoming">{exam.status}</span>
-              </div>
-              <p className="exam-time">{exam.date}</p>
-              <p className="exam-detail">Exam Hour: {exam.time}</p>
-              <p className="exam-detail">Syllabus: {exam.syllabus}</p>
-              <p className="exam-detail">Room: {exam.room}</p>
-            </Card>
-          ))}
-        </div>
-      </div> */}
 
-      {/* <div className="quick-links">
-        <button type="button" className="primary">Attendance Details</button>
-        <button type="button" className="secondary">View Results</button>
-        <button type="button" className="secondary">Upcoming Exams</button>
-      </div> */}
+
+    
     </section>
   )
 }

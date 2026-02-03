@@ -13,23 +13,32 @@ import {
 } from './data/studentData'
 import { formatDate, isWeekend } from './utils/date'
 import { useEffect, useState } from 'react'
-import { AppRouter, navItems } from './routers/route'
+import { AppRouter, adminNavItems, navItems } from './routers/route'
 import Navbar from './Navbar/Navbar'
 import Drawer from './Components/Drawer'
 
 function App() {
   const API_BASE = import.meta.env.VITE_API_BASE || '/api'
+  const authStorageKey = 'academix_session'
+  const roleStorageKey = 'academix_role'
+  const [authToken, setAuthToken] = useState(() => localStorage.getItem(authStorageKey))
   const today = new Date()
   const todayLabel = formatDate(today)
   const semesterKey = today.getMonth() <= 5 ? 'Jan-Jun' : 'Jul-Dec'
-  const pathname = window.location.pathname
-  const currentRoute = pathname === '/' ? '/student/dashboard' : pathname
+  const [currentRoute, setCurrentRoute] = useState(() => {
+    const pathname = window.location.pathname
+    return pathname === '/' ? '/student/dashboard' : pathname
+  })
+  const isLoginRoute = currentRoute === '/login'
+  const isAdminRoute = currentRoute.startsWith('/admin')
+  const [userRole, setUserRole] = useState(() => localStorage.getItem(roleStorageKey))
   const weekend = isWeekend(today)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [studentData, setStudentData] = useState(student)
   const [examsData, setExamsData] = useState(exams)
   const [noticesData, setNoticesData] = useState(notices)
   const [attendanceData, setAttendanceData] = useState(attendanceBySemester)
+  const [isAuthenticated, setIsAuthenticated] = useState(Boolean(authToken))
 
   const todayRoutine = isWeekend(today) ? [] : routineItems
   const nextExam = examsData[0]
@@ -42,6 +51,73 @@ function App() {
   const handleDrawerClose = () => {
     setDrawerOpen(false)
   }
+
+  const handleLogin = (sessionToken, role) => {
+    localStorage.setItem(authStorageKey, sessionToken)
+    localStorage.setItem(roleStorageKey, role)
+    setAuthToken(sessionToken)
+    setUserRole(role)
+    setIsAuthenticated(true)
+    const target = role === 'admin' ? '/admin/dashboard' : '/student/dashboard'
+    window.history.replaceState({}, '', target)
+    setCurrentRoute(target)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem(authStorageKey)
+    localStorage.removeItem(roleStorageKey)
+    setAuthToken(null)
+    setUserRole(null)
+    setIsAuthenticated(false)
+    window.history.replaceState({}, '', '/login')
+    setCurrentRoute('/login')
+  }
+
+  useEffect(() => {
+    if (!isAuthenticated && currentRoute !== '/login') {
+      window.history.replaceState({}, '', '/login')
+      setCurrentRoute('/login')
+    }
+    if (isAuthenticated && isAdminRoute && userRole !== 'admin') {
+      window.history.replaceState({}, '', '/student/dashboard')
+      setCurrentRoute('/student/dashboard')
+    }
+    if (isAuthenticated && currentRoute === '/login') {
+      const target = userRole === 'admin' ? '/admin/dashboard' : '/student/dashboard'
+      window.history.replaceState({}, '', target)
+      setCurrentRoute(target)
+    }
+  }, [currentRoute, isAuthenticated, isAdminRoute, userRole])
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const pathname = window.location.pathname
+      setCurrentRoute(pathname === '/' ? '/student/dashboard' : pathname)
+    }
+
+    const handleDocumentClick = (event) => {
+      const link = event.target.closest('a')
+      if (!link) return
+      if (link.target === '_blank') return
+      const href = link.getAttribute('href')
+      if (!href || !href.startsWith('/')) return
+
+      event.preventDefault()
+      if (href !== currentRoute) {
+        window.history.pushState({}, '', href)
+        setCurrentRoute(href)
+      }
+      setDrawerOpen(false)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    document.addEventListener('click', handleDocumentClick)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+      document.removeEventListener('click', handleDocumentClick)
+    }
+  }, [currentRoute])
 
   useEffect(() => {
     let ignore = false
@@ -77,11 +153,20 @@ function App() {
 
     const loadData = async () => {
       try {
+        const authHeaders = {}
         const [students, apiExams, apiNotices, apiAttendance] = await Promise.all([
-          fetch(`${API_BASE}/students/`).then((res) => (res.ok ? res.json() : [])),
-          fetch(`${API_BASE}/exams/`).then((res) => (res.ok ? res.json() : [])),
-          fetch(`${API_BASE}/notices/`).then((res) => (res.ok ? res.json() : [])),
-          fetch(`${API_BASE}/attendance/`).then((res) => (res.ok ? res.json() : [])),
+          fetch(`${API_BASE}/students/`, { headers: authHeaders }).then((res) =>
+            res.ok ? res.json() : [],
+          ),
+          fetch(`${API_BASE}/exams/`, { headers: authHeaders }).then((res) =>
+            res.ok ? res.json() : [],
+          ),
+          fetch(`${API_BASE}/notices/`, { headers: authHeaders }).then((res) =>
+            res.ok ? res.json() : [],
+          ),
+          fetch(`${API_BASE}/attendance/`, { headers: authHeaders }).then((res) =>
+            res.ok ? res.json() : [],
+          ),
         ])
 
         if (ignore) return
@@ -141,19 +226,29 @@ function App() {
     return () => {
       ignore = true
     }
-  }, [API_BASE, today])
+  }, [API_BASE, authToken])
+
+  if (isLoginRoute || !isAuthenticated) {
+    return <AppRouter onLogin={handleLogin} apiBase={API_BASE} currentRoute={currentRoute} />
+  }
 
   return (
     <div className="app-shell">
       <Drawer
         open={drawerOpen}
         onClose={handleDrawerClose}
-        navItems={navItems}
+        navItems={isAdminRoute ? adminNavItems : navItems}
         currentRoute={currentRoute}
         student={studentData}
+        onLogout={handleLogout}
       />
       <div className="main">
-        <Navbar onMenuClick={handleDrawerToggle} isDrawerOpen={drawerOpen} student={studentData} />
+        <Navbar
+          onMenuClick={handleDrawerToggle}
+          isDrawerOpen={drawerOpen}
+          student={studentData}
+          showStudent={!isAdminRoute}
+        />
 
         <main className="content">
           <AppRouter
@@ -171,6 +266,8 @@ function App() {
             nextExam={nextExam}
             exams={examsData}
             weekend={weekend}
+            currentRoute={currentRoute}
+            apiBase={API_BASE}
           />
         </main>
       </div>

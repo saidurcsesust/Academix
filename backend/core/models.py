@@ -11,6 +11,31 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.name} ({self.class_level}-{self.section})"
 
+    @property
+    def is_authenticated(self):
+        return True
+
+
+class Teacher(models.Model):
+    name = models.CharField(max_length=120)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=30, blank=True)
+    department = models.CharField(max_length=120)
+    role = models.CharField(max_length=80)
+    password_hash = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.name} ({self.department})"
+
+
+class AdminUser(models.Model):
+    name = models.CharField(max_length=120)
+    email = models.EmailField(unique=True)
+    password_hash = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
 
 class Subject(models.Model):
     name = models.CharField(max_length=120)

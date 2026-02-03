@@ -11,6 +11,8 @@ from .models import (
     SemesterSubject,
     Student,
     Subject,
+    Teacher,
+    AdminUser,
 )
 
 
@@ -18,12 +20,27 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id', 'name', 'roll', 'password_hash', 'class_level', 'section']
+        extra_kwargs = {'password_hash': {'write_only': True}}
 
 
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = ['id', 'name', 'subject_code']
+
+
+class TeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        fields = ['id', 'name', 'email', 'phone', 'department', 'role', 'password_hash']
+        extra_kwargs = {'password_hash': {'write_only': True}}
+
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdminUser
+        fields = ['id', 'name', 'email', 'password_hash']
+        extra_kwargs = {'password_hash': {'write_only': True}}
 
 
 class AcademicYearSerializer(serializers.ModelSerializer):

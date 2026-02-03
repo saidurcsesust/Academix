@@ -1,4 +1,4 @@
-export default function Sidebar({ navItems, currentRoute, student, className = '', onNavigate }) {
+export default function Sidebar({ navItems, currentRoute, student, className = '', onNavigate, onLogout }) {
   return (
     <aside className={`sidebar ${className}`.trim()}>
       <nav className="nav">
@@ -14,7 +14,7 @@ export default function Sidebar({ navItems, currentRoute, student, className = '
         ))}
       </nav>
       <div className="sidebar-logout">
-        <a className="drawer-logout" href="/logout">Logout</a>
+        <button className="drawer-logout" type="button" onClick={onLogout}>Logout</button>
       </div>
     </aside>
   )

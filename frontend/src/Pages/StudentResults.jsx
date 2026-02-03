@@ -144,7 +144,7 @@ export default function StudentResults({ results }) {
         title="My Results"
         subtitle="Review semester-wise and annual merged performance."
         actions={(
-          <div className="filter-row">
+          <div className="filter-row results-filter-row">
             <button
               className={`filter-chip result-toggle${resultType === 'classTest' ? ' active' : ''}`}
               type="button"

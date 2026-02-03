@@ -31,12 +31,6 @@ export default function StudentRoutine({ routineItems, weeklyRoutine }) {
       <PageHeader
         title="Class Routine"
         subtitle="Daily and weekly views based on your class."
-        actions={(
-          <div className="toggle-row">
-            <button className="toggle active" type="button">Daily View</button>
-            <button className="toggle" type="button">Weekly View</button>
-          </div>
-        )}
       />
 
       <Card>

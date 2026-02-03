@@ -10,23 +10,6 @@ export default function StudentNotices({ notices }) {
       <PageHeader
         title="Notices"
         subtitle="Search and filter important announcements."
-        actions={(
-          <div className="filter-row">
-            <input
-              className="filter-input"
-              type="search"
-              placeholder="Search notice..."
-              aria-label="Search notice"
-            />
-            <select className="filter-select" aria-label="Filter by category" defaultValue="General">
-              <option value="General">General</option>
-              <option value="Exam">Exam</option>
-              <option value="Holiday">Holiday</option>
-              <option value="Fee">Fee</option>
-              <option value="Event">Event</option>
-            </select>
-          </div>
-        )}
       />
 
       <Card className="notice-board">

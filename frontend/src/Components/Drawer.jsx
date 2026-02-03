@@ -1,6 +1,6 @@
 import Sidebar from './Sidebar'
 
-export default function Drawer({ open, onClose, navItems, currentRoute, student }) {
+export default function Drawer({ open, onClose, navItems, currentRoute, student, onLogout }) {
   return (
     <div className={`drawer${open ? ' open' : ''}`} aria-hidden={!open}>
       <button className="drawer-backdrop" type="button" aria-label="Close navigation" onClick={onClose} />
@@ -19,6 +19,7 @@ export default function Drawer({ open, onClose, navItems, currentRoute, student 
           student={student}
           className="drawer-sidebar"
           onNavigate={onClose}
+          onLogout={onLogout}
         />
       </div>
     </div>
