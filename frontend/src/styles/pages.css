@@ -206,7 +206,112 @@
 
 .admin-panel {
   min-height: 320px;
+  /* max-width: ; */
 }
+
+.admin-action-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  justify-content: flex-end;
+}
+
+.admin-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgb(19, 122, 127);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-action-btn:hover {
+  border-color: rgba(19, 122, 127, 0.45);
+  box-shadow: 0 8px 20px rgba(19, 122, 127, 0.18);
+  transform: translateY(-1px);
+}
+
+.admin-form-center {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-form-card {
+  width: min(520px, 100%);
+}
+
+.admin-form-toolbar {
+  width: min(520px, 100%);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-directory-home {
+  align-items: stretch;
+}
+
+.admin-directory-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-directory-cta {
+  margin-top: auto;
+  padding: 16px;
+  background: #f3f6f5;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.admin-directory-center {
+  display: flex;
+  justify-content: center;
+}
+
+.admin-directory-panel--list {
+  width: min(720px, 100%);
+}
+
+.admin-directory-list {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-directory-item {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.admin-directory-item div {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-directory-item small {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
 
 .admin-chart {
   display: grid;

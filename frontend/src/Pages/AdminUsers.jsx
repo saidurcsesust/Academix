@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Card from '../Components/Card'
 import CardHeader from '../Components/CardHeader'
 import PageHeader from '../Components/PageHeader'
@@ -7,10 +7,34 @@ export default function AdminUsers({ apiBase = '/api' }) {
   const [userType, setUserType] = useState('student')
   const [statusMessage, setStatusMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [academicYears, setAcademicYears] = useState([])
+
+  useEffect(() => {
+    let ignore = false
+
+    const loadYears = async () => {
+      try {
+        const response = await fetch(`${apiBase}/academic-years/`)
+        const data = response.ok ? await response.json() : []
+        if (!ignore) {
+          setAcademicYears(Array.isArray(data) ? data : [])
+        }
+      } catch (error) {
+        if (!ignore) setAcademicYears([])
+      }
+    }
+
+    loadYears()
+
+    return () => {
+      ignore = true
+    }
+  }, [apiBase])
 
   const handleCreateUser = async (event) => {
     event.preventDefault()
-    const formData = new FormData(event.currentTarget)
+    const form = event.currentTarget
+    const formData = new FormData(form)
     const payload =
       userType === 'student'
         ? {
@@ -19,6 +43,7 @@ export default function AdminUsers({ apiBase = '/api' }) {
             password_hash: formData.get('password'),
             class_level: formData.get('class_level'),
             section: formData.get('section'),
+            academic_year: Number(formData.get('academic_year')),
           }
         : {
             name: formData.get('name'),
@@ -49,7 +74,7 @@ export default function AdminUsers({ apiBase = '/api' }) {
       }
 
       setStatusMessage(`Created ${userType} successfully.`)
-      event.currentTarget.reset()
+      form.reset()
     } catch (error) {
       setStatusMessage(error?.message || 'Something went wrong.')
     } finally {
@@ -129,6 +154,18 @@ export default function AdminUsers({ apiBase = '/api' }) {
               <span>Password</span>
               <input className="admin-input" name="password" type="password" required />
             </label>
+
+            {userType === 'student' && (
+              <label className="admin-label">
+                <span>Academic Year</span>
+                <select className="filter-select" name="academic_year" required>
+                  <option value="">Select year</option>
+                  {academicYears.map((year) => (
+                    <option key={year.id} value={year.id}>{year.year}</option>
+                  ))}
+                </select>
+              </label>
+            )}
 
             <div className="admin-form-actions">
               <button className="primary" type="submit" disabled={isSubmitting}>

@@ -19,5 +19,16 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('students.urls')),
+    path('api/', include('teachers.urls')),
+    path('api/', include('admin_users.urls')),
+    path('api/', include('notices.urls')),
+    path('api/', include('exams.urls')),
+    path('api/', include('routines.urls')),
+    path('api/', include('attendance.urls')),
+    path('api/', include('results.urls')),
+    path('api/', include('faculty.urls')),
+    path('api/', include('alumni.urls')),
+    path('api/', include('classrooms.urls')),
     path('api/', include('core.urls')),
 ]

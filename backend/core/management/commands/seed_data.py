@@ -4,18 +4,18 @@ from django.core.management.base import BaseCommand
 
 from core.models import (
     AcademicYear,
-    Attendance,
-    Exam,
-    Notice,
-    Result,
-    Routine,
     Semester,
     SemesterSubject,
-    Student,
     Subject,
-    Teacher,
-    AdminUser,
 )
+from admin_users.models import AdminUser
+from attendance.models import Attendance
+from exams.models import Exam
+from notices.models import Notice
+from results.models import Result
+from routines.models import Routine
+from students.models import Student
+from teachers.models import Teacher
 
 
 class Command(BaseCommand):
@@ -48,7 +48,14 @@ class Command(BaseCommand):
         )
 
         students = [
-            Student(name='Ariana Khan', class_level='7', section='Boys', roll=12, password_hash='academix123'),
+            Student(
+                name='Ariana Khan',
+                class_level='7',
+                section='Boys',
+                roll=12,
+                password_hash='academix123',
+                academic_year=year,
+            ),
         ]
         Student.objects.bulk_create(students)
         students = list(Student.objects.all())
@@ -72,6 +79,7 @@ class Command(BaseCommand):
                     section='A' if index % 2 == 0 else 'B',
                     roll=roll,
                     password_hash='academix123',
+                    academic_year=year,
                 )
             )
         Student.objects.bulk_create(extra_students)

@@ -54,7 +54,7 @@ export default function AdminUserDetails({ apiBase = '/api' }) {
             <h2>{user?.name || 'Loading...'}</h2>
             <p className="card-note">{role === 'students' ? 'Student' : 'Teacher'} Profile</p>
           </div>
-          <a className="text-link" href="/admin/directory">Back to Directory</a>
+          <a className="text-link" href={`/admin/directory/${role}`}>Back to Directory</a>
         </CardHeader>
 
         {status === 'error' ? (

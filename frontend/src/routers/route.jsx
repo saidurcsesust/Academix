@@ -10,7 +10,11 @@ import Login from '../Pages/Login'
 import AdminDashboard from '../Pages/AdminDashboard'
 import AdminUsers from '../Pages/AdminUsers'
 import AdminDirectory from '../Pages/AdminDirectory'
+import AdminDirectoryList from '../Pages/AdminDirectoryList'
 import AdminUserDetails from '../Pages/AdminUserDetails'
+import AdminClasses from '../Pages/AdminClasses'
+import AdminClassCreate from '../Pages/AdminClassCreate'
+import AdminAssignSubject from '../Pages/AdminAssignSubject'
 import { attendanceStatus } from '../utils/date'
 
 export const navItems = [
@@ -28,6 +32,7 @@ export const adminNavItems = [
   { label: 'Admin Dashboard', path: '/admin/dashboard' },
   { label: 'User Management', path: '/admin/users' },
   { label: 'User Directory', path: '/admin/directory' },
+  { label: 'Class Management', path: '/admin/classes' },
 ]
 
 export function AppRouter({
@@ -90,12 +95,24 @@ export function AppRouter({
     ),
     '/admin/users': <AdminUsers apiBase={apiBase} />,
     '/admin/directory': <AdminDirectory apiBase={apiBase} />,
+    '/admin/classes': <AdminClasses apiBase={apiBase} />,
+    '/admin/classes/new': <AdminClassCreate apiBase={apiBase} />,
+    '/admin/classes/assign': <AdminAssignSubject apiBase={apiBase} />,
   }
 
-  const isDetailsRoute = resolvedRoute.startsWith('/admin/directory/')
-  const activePage = isDetailsRoute
-    ? <AdminUserDetails apiBase={apiBase} />
-    : (pageMap[resolvedRoute] || pageMap['/student/dashboard'])
+  const directoryParts = resolvedRoute.split('/').filter(Boolean)
+  const isDirectoryRoute = directoryParts[0] === 'admin' && directoryParts[1] === 'directory'
+  const directoryRole = directoryParts[2]
+  const directoryId = directoryParts[3]
+  const isDirectoryList = isDirectoryRoute && (directoryRole === 'students' || directoryRole === 'teachers') && !directoryId
+  const isDirectoryDetails = isDirectoryRoute && (directoryRole === 'students' || directoryRole === 'teachers') && directoryId
+
+  let activePage = pageMap[resolvedRoute] || pageMap['/student/dashboard']
+  if (isDirectoryList) {
+    activePage = <AdminDirectoryList apiBase={apiBase} />
+  } else if (isDirectoryDetails) {
+    activePage = <AdminUserDetails apiBase={apiBase} />
+  }
 
   return <>{activePage}</>
 }

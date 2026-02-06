@@ -25,3 +25,4 @@ dist-ssr
 /backend/.venv
 /backend/core/__pycache__
 /backend/academix_backend/__pycache__
+/backend/myenv
