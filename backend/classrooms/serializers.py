@@ -25,11 +25,21 @@ class ClassroomSerializer(serializers.ModelSerializer):
 class ClassroomSubjectSerializer(serializers.ModelSerializer):
     classroom_label = serializers.CharField(source='classroom.__str__', read_only=True)
     subject_name = serializers.CharField(source='subject.name', read_only=True)
+    subject_code = serializers.CharField(source='subject.subject_code', read_only=True)
     teacher_name = serializers.CharField(source='teacher.name', read_only=True)
 
     class Meta:
         model = ClassroomSubject
-        fields = ['id', 'classroom', 'subject', 'teacher', 'classroom_label', 'subject_name', 'teacher_name']
+        fields = [
+            'id',
+            'classroom',
+            'subject',
+            'teacher',
+            'classroom_label',
+            'subject_name',
+            'subject_code',
+            'teacher_name',
+        ]
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):

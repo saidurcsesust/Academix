@@ -95,7 +95,49 @@ const buildAnnualMerged = (semesters) => {
   }
 }
 
-export default function StudentResults({ results }) {
+export default function StudentResults({ results, apiResults = [] }) {
+  if (Array.isArray(apiResults) && apiResults.length) {
+    return (
+      <section className="page" id="results">
+        <PageHeader
+          title="My Results"
+          subtitle="Results published by your subject teachers."
+        />
+
+        <Card>
+          <CardHeader>
+            <h2>Results</h2>
+          </CardHeader>
+          <table className="routine-table">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Code</th>
+                <th>Exam</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Point</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {apiResults.map((row) => (
+                <tr key={row.id}>
+                  <td>{row.subject_name || '—'}</td>
+                  <td>{row.subject_code || '—'}</td>
+                  <td>{row.exam_type === 'class_test' ? `Class Test ${row.exam_no || ''}`.trim() : 'Semester Final'}</td>
+                  <td>{row.marks}</td>
+                  <td>{row.grade}</td>
+                  <td>{row.point}</td>
+                  <td>{row.exam_date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card>
+      </section>
+    )
+  }
   const annualMerged = useMemo(
     () => buildAnnualMerged(results.semesters),
     [results.semesters],

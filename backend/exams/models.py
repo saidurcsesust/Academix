@@ -10,8 +10,18 @@ class Exam(models.Model):
     ]
 
     semester = models.ForeignKey('core.Semester', on_delete=models.CASCADE, related_name='exams')
+    classroom_subject = models.ForeignKey(
+        'classrooms.ClassroomSubject',
+        on_delete=models.SET_NULL,
+        related_name='exams',
+        blank=True,
+        null=True,
+    )
     exam_type = models.CharField(max_length=20, choices=EXAM_TYPE_CHOICES)
     exam_no = models.PositiveSmallIntegerField(blank=True, null=True)
+    date = models.DateField()
+    start_time = models.TimeField()
+    duration_minutes = models.PositiveIntegerField(default=90)
 
     class Meta:
         unique_together = ('semester', 'exam_type', 'exam_no')

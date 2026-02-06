@@ -15,6 +15,11 @@ import AdminUserDetails from '../Pages/AdminUserDetails'
 import AdminClasses from '../Pages/AdminClasses'
 import AdminClassCreate from '../Pages/AdminClassCreate'
 import AdminAssignSubject from '../Pages/AdminAssignSubject'
+import TeacherDashboard from '../Pages/TeacherDashboard'
+import TeacherAttendance from '../Pages/TeacherAttendance'
+import TeacherExams from '../Pages/TeacherExams'
+import TeacherMarks from '../Pages/TeacherMarks'
+import AdminApprovals from '../Pages/AdminApprovals'
 import { attendanceStatus } from '../utils/date'
 
 export const navItems = [
@@ -33,6 +38,14 @@ export const adminNavItems = [
   { label: 'User Management', path: '/admin/users' },
   { label: 'User Directory', path: '/admin/directory' },
   { label: 'Class Management', path: '/admin/classes' },
+  { label: 'Approvals', path: '/admin/approvals' },
+]
+
+export const teacherNavItems = [
+  { label: 'Teacher Dashboard', path: '/teacher/dashboard' },
+  { label: 'Attendance', path: '/teacher/attendance' },
+  { label: 'Create Exam', path: '/teacher/exams' },
+  { label: 'Enter Marks', path: '/teacher/marks' },
 ]
 
 export function AppRouter({
@@ -45,6 +58,8 @@ export function AppRouter({
   resultsBySemester,
   routineItems,
   student,
+  apiResults,
+  enrolledSubjects,
   todayLabel,
   todayRoutine,
   weeklyRoutine,
@@ -52,6 +67,7 @@ export function AppRouter({
   weekend,
   onLogin,
   currentRoute,
+  userProfile,
   apiBase = '/api',
 } = {}) {
   const pathname = window.location.pathname
@@ -71,6 +87,7 @@ export function AppRouter({
         nextExam={nextExam}
         exams={exams}
         results={resultsSummary}
+        enrolledSubjects={enrolledSubjects}
       />
     ),
     '/student/routine': (
@@ -80,7 +97,7 @@ export function AppRouter({
       <StudentAttendance attendanceStats={attendanceStats} />
     ),
     '/student/exams': <StudentExams exams={exams} />,
-    '/student/results': <StudentResults results={resultsBySemester} />,
+    '/student/results': <StudentResults results={resultsBySemester} apiResults={apiResults} />,
     '/student/notices': <StudentNotices notices={notices} />,
     '/student/faculty': <StudentFaculty faculty={faculty} />,
     '/student/alumni': <StudentAlumni alumni={alumni} />,
@@ -98,6 +115,11 @@ export function AppRouter({
     '/admin/classes': <AdminClasses apiBase={apiBase} />,
     '/admin/classes/new': <AdminClassCreate apiBase={apiBase} />,
     '/admin/classes/assign': <AdminAssignSubject apiBase={apiBase} />,
+    '/admin/approvals': <AdminApprovals apiBase={apiBase} />,
+    '/teacher/dashboard': <TeacherDashboard apiBase={apiBase} userProfile={userProfile} />,
+    '/teacher/attendance': <TeacherAttendance apiBase={apiBase} userProfile={userProfile} />,
+    '/teacher/exams': <TeacherExams apiBase={apiBase} userProfile={userProfile} />,
+    '/teacher/marks': <TeacherMarks apiBase={apiBase} userProfile={userProfile} />,
   }
 
   const directoryParts = resolvedRoute.split('/').filter(Boolean)

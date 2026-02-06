@@ -13,7 +13,7 @@ import {
 } from './data/studentData'
 import { formatDate, isWeekend } from './utils/date'
 import { useEffect, useState } from 'react'
-import { AppRouter, adminNavItems, navItems } from './routers/route'
+import { AppRouter, adminNavItems, navItems, teacherNavItems } from './routers/route'
 import Navbar from './Navbar/Navbar'
 import Drawer from './Components/Drawer'
 
@@ -21,6 +21,7 @@ function App() {
   const API_BASE = import.meta.env.VITE_API_BASE || '/api'
   const authStorageKey = 'academix_session'
   const roleStorageKey = 'academix_role'
+  const userStorageKey = 'academix_user'
   const [authToken, setAuthToken] = useState(() => localStorage.getItem(authStorageKey))
   const today = new Date()
   const todayLabel = formatDate(today)
@@ -32,12 +33,18 @@ function App() {
   const isLoginRoute = currentRoute === '/login'
   const isAdminRoute = currentRoute.startsWith('/admin')
   const [userRole, setUserRole] = useState(() => localStorage.getItem(roleStorageKey))
+  const [userProfile, setUserProfile] = useState(() => {
+    const raw = localStorage.getItem(userStorageKey)
+    return raw ? JSON.parse(raw) : null
+  })
   const weekend = isWeekend(today)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [studentData, setStudentData] = useState(student)
   const [examsData, setExamsData] = useState(exams)
   const [noticesData, setNoticesData] = useState(notices)
   const [attendanceData, setAttendanceData] = useState(attendanceBySemester)
+  const [enrolledSubjects, setEnrolledSubjects] = useState([])
+  const [studentResultsApi, setStudentResultsApi] = useState([])
   const [isAuthenticated, setIsAuthenticated] = useState(Boolean(authToken))
 
   const todayRoutine = isWeekend(today) ? [] : routineItems
@@ -52,13 +59,31 @@ function App() {
     setDrawerOpen(false)
   }
 
-  const handleLogin = (sessionToken, role) => {
+  const handleLogin = (sessionToken, role, user) => {
     localStorage.setItem(authStorageKey, sessionToken)
     localStorage.setItem(roleStorageKey, role)
     setAuthToken(sessionToken)
     setUserRole(role)
     setIsAuthenticated(true)
-    const target = role === 'admin' ? '/admin/dashboard' : '/student/dashboard'
+    if (user) {
+      localStorage.setItem(userStorageKey, JSON.stringify(user))
+      setUserProfile(user)
+      if (role === 'student') {
+        setStudentData({
+          name: user.name,
+          classLevel: user.class_level,
+          section: user.section,
+          roll: user.roll,
+          id: user.id,
+        })
+      }
+    }
+    const target =
+      role === 'admin'
+        ? '/admin/dashboard'
+        : role === 'teacher'
+          ? '/teacher/dashboard'
+          : '/student/dashboard'
     window.history.replaceState({}, '', target)
     setCurrentRoute(target)
   }
@@ -66,8 +91,10 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem(authStorageKey)
     localStorage.removeItem(roleStorageKey)
+    localStorage.removeItem(userStorageKey)
     setAuthToken(null)
     setUserRole(null)
+    setUserProfile(null)
     setIsAuthenticated(false)
     window.history.replaceState({}, '', '/login')
     setCurrentRoute('/login')
@@ -79,11 +106,22 @@ function App() {
       setCurrentRoute('/login')
     }
     if (isAuthenticated && isAdminRoute && userRole !== 'admin') {
-      window.history.replaceState({}, '', '/student/dashboard')
-      setCurrentRoute('/student/dashboard')
+      const target = userRole === 'teacher' ? '/teacher/dashboard' : '/student/dashboard'
+      window.history.replaceState({}, '', target)
+      setCurrentRoute(target)
+    }
+    if (isAuthenticated && currentRoute.startsWith('/teacher') && userRole !== 'teacher') {
+      const target = userRole === 'admin' ? '/admin/dashboard' : '/student/dashboard'
+      window.history.replaceState({}, '', target)
+      setCurrentRoute(target)
     }
     if (isAuthenticated && currentRoute === '/login') {
-      const target = userRole === 'admin' ? '/admin/dashboard' : '/student/dashboard'
+      const target =
+        userRole === 'admin'
+          ? '/admin/dashboard'
+          : userRole === 'teacher'
+            ? '/teacher/dashboard'
+            : '/student/dashboard'
       window.history.replaceState({}, '', target)
       setCurrentRoute(target)
     }
@@ -154,47 +192,63 @@ function App() {
     const loadData = async () => {
       try {
         const authHeaders = {}
-        const [students, apiExams, apiNotices, apiAttendance] = await Promise.all([
-          fetch(`${API_BASE}/students/`, { headers: authHeaders }).then((res) =>
-            res.ok ? res.json() : [],
-          ),
-          fetch(`${API_BASE}/exams/`, { headers: authHeaders }).then((res) =>
-            res.ok ? res.json() : [],
-          ),
-          fetch(`${API_BASE}/notices/`, { headers: authHeaders }).then((res) =>
-            res.ok ? res.json() : [],
-          ),
-          fetch(`${API_BASE}/attendance/`, { headers: authHeaders }).then((res) =>
-            res.ok ? res.json() : [],
-          ),
-        ])
+    const [students, apiExams, apiNotices] = await Promise.all([
+      fetch(`${API_BASE}/students/`, { headers: authHeaders }).then((res) =>
+        res.ok ? res.json() : [],
+      ),
+      fetch(`${API_BASE}/exams/`, { headers: authHeaders }).then((res) =>
+        res.ok ? res.json() : [],
+      ),
+      fetch(`${API_BASE}/notices/`, { headers: authHeaders }).then((res) =>
+        res.ok ? res.json() : [],
+      ),
+    ])
 
         if (ignore) return
 
-        if (Array.isArray(students) && students.length) {
-          const [primary] = students
+        let attendanceRecords = []
+        let studentExams = apiExams
+        let subjectList = []
+        let resultList = []
+        const activeStudent = userRole === 'student' && userProfile ? userProfile : (Array.isArray(students) && students.length ? students[0] : null)
+
+        if (activeStudent) {
           setStudentData({
-            name: primary.name,
-            classLevel: primary.class_level,
-            section: primary.section,
-            roll: primary.roll,
-            id: primary.id,
+            name: activeStudent.name,
+            classLevel: activeStudent.class_level,
+            section: activeStudent.section,
+            roll: activeStudent.roll,
+            id: activeStudent.id,
           })
+          const attendanceRes = await fetch(`${API_BASE}/class-attendance/?student=${activeStudent.id}`, { headers: authHeaders })
+          attendanceRecords = attendanceRes.ok ? await attendanceRes.json() : []
+          const examRes = await fetch(`${API_BASE}/exams/?student=${activeStudent.id}`, { headers: authHeaders })
+          studentExams = examRes.ok ? await examRes.json() : apiExams
+          const enrollmentRes = await fetch(`${API_BASE}/classroom-subjects/?student=${activeStudent.id}`, { headers: authHeaders })
+          const enrollmentData = enrollmentRes.ok ? await enrollmentRes.json() : []
+          subjectList = Array.isArray(enrollmentData) ? enrollmentData : []
+          const resultsRes = await fetch(`${API_BASE}/results/?student=${activeStudent.id}`, { headers: authHeaders })
+          resultList = resultsRes.ok ? await resultsRes.json() : []
         }
 
-        if (Array.isArray(apiExams) && apiExams.length) {
+        if (Array.isArray(studentExams) && studentExams.length) {
           setExamsData(
-            apiExams.map((exam) => ({
-              name: exam.title,
-              type: exam.title,
-              code: exam.subject,
-              date: formatDate(new Date(exam.date)),
-              time: formatTime(exam.start_time),
-              subject: exam.subject,
-              syllabus: 'See syllabus',
-              room: 'TBD',
-              status: new Date(exam.date) >= today ? 'Upcoming' : 'Done',
-            })),
+            studentExams.map((exam) => {
+              const examName = exam.exam_type === 'class_test'
+                ? `Class Test ${exam.exam_no || ''}`.trim()
+                : 'Semester Final'
+              return {
+                name: examName,
+                type: exam.exam_type,
+                code: exam.class_label || '',
+                date: formatDate(new Date(exam.date)),
+                time: formatTime(exam.start_time),
+                subject: exam.subject_name || 'Subject',
+                syllabus: 'See syllabus',
+                room: 'TBD',
+                status: new Date(exam.date) >= today ? 'Upcoming' : 'Done',
+              }
+            }),
           )
         }
 
@@ -202,17 +256,25 @@ function App() {
           setNoticesData(
             apiNotices.map((notice) => ({
               title: notice.title,
-              date: formatDate(new Date(notice.created_at)),
+              date: formatDate(new Date(notice.date || notice.created_at)),
               category: 'General',
-              preview: notice.body.slice(0, 80),
-              body: notice.body,
+              preview: (notice.description || notice.body || '').slice(0, 80),
+              body: notice.description || notice.body || '',
               attachments: [],
             })),
           )
         }
 
-        if (Array.isArray(apiAttendance) && apiAttendance.length) {
-          setAttendanceData(computeAttendanceBySemester(apiAttendance))
+        if (subjectList.length) {
+          setEnrolledSubjects(subjectList)
+        }
+
+        if (Array.isArray(resultList)) {
+          setStudentResultsApi(resultList)
+        }
+
+        if (Array.isArray(attendanceRecords) && attendanceRecords.length) {
+          setAttendanceData(computeAttendanceBySemester(attendanceRecords))
         }
       } catch (error) {
         if (!ignore) {
@@ -237,7 +299,7 @@ function App() {
       <Drawer
         open={drawerOpen}
         onClose={handleDrawerClose}
-        navItems={isAdminRoute ? adminNavItems : navItems}
+        navItems={isAdminRoute ? adminNavItems : (currentRoute.startsWith('/teacher') ? teacherNavItems : navItems)}
         currentRoute={currentRoute}
         student={studentData}
         onLogout={handleLogout}
@@ -247,7 +309,7 @@ function App() {
           onMenuClick={handleDrawerToggle}
           isDrawerOpen={drawerOpen}
           student={studentData}
-          showStudent={!isAdminRoute}
+          showStudent={!isAdminRoute && !currentRoute.startsWith('/teacher')}
         />
 
         <main className="content">
@@ -266,7 +328,10 @@ function App() {
             nextExam={nextExam}
             exams={examsData}
             weekend={weekend}
+            enrolledSubjects={enrolledSubjects}
+            apiResults={studentResultsApi}
             currentRoute={currentRoute}
+            userProfile={userProfile}
             apiBase={API_BASE}
           />
         </main>

@@ -21,13 +21,14 @@ class AcademicYearSerializer(serializers.ModelSerializer):
 
 
 class SemesterSerializer(serializers.ModelSerializer):
+    academic_year_label = serializers.CharField(source='academic_year.year', read_only=True)
+
     class Meta:
         model = Semester
-        fields = ['id', 'academic_year', 'semester_no']
+        fields = ['id', 'academic_year', 'academic_year_label', 'semester_no']
 
 
 class SemesterSubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = SemesterSubject
         fields = ['id', 'semester', 'subject']
-

@@ -39,16 +39,6 @@ export default function StudentExams({ exams }) {
         subtitle="Track upcoming assessments and plan your preparation."
       />
 
-      {nextExam && (
-        <Card className="highlight-card exam-highlight">
-          <p className="card-title">Exam Countdown</p>
-          <h2>{countdownLabel}</h2>
-          <p className="exam-detail">
-            {nextExam.name} • {nextExam.subject} • {nextExam.date} {nextExam.time}
-          </p>
-        </Card>
-      )}
-
       <div className="exam-grid">
         {sortedExams.map((exam) => {
           const examDate = parseExamDate(exam)

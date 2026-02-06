@@ -9,6 +9,7 @@ from core.models import (
     Subject,
 )
 from admin_users.models import AdminUser
+from classrooms.models import Classroom, ClassroomSubject
 from attendance.models import Attendance
 from exams.models import Exam
 from notices.models import Notice
@@ -47,58 +48,61 @@ class Command(BaseCommand):
             + [SemesterSubject(semester=semester_2, subject=subject) for subject in subjects]
         )
 
-        students = [
-            Student(
-                name='Ariana Khan',
-                class_level='7',
-                section='Boys',
-                roll=12,
-                password_hash='academix123',
-                academic_year=year,
-            ),
+        teacher_names = [
+            'Rashed Mahmud', 'Nusrat Jahan', 'Sabbir Rahman', 'Farzana Ahmed', 'Imran Hossain',
+            'Tania Sultana', 'Fahim Hasan', 'Sharmin Akter', 'Mehedi Hasan', 'Jannat Ferdous',
+            'Ayesha Rahman', 'Sakib Khan', 'Mst. Rupa', 'Saifullah Noor', 'Lamia Siddique',
+            'Nazmul Karim', 'Priya Das', 'Raihan Islam', 'Shila Begum', 'Aminul Haque',
         ]
-        Student.objects.bulk_create(students)
-        students = list(Student.objects.all())
-
-        Teacher.objects.create(
-            name='Dr. Rashed Mahmud',
-            email='r.mahmud@springfield.edu',
-            phone='+880 1712-345-678',
-            department='Mathematics',
-            role='Senior Lecturer',
-            password_hash='academix123',
-        )
-
-        extra_students = []
-        for index in range(50):
-            roll = 100 + index
-            extra_students.append(
-                Student(
-                    name=f'Student {index + 1}',
-                    class_level=str(6 + (index % 5)),
-                    section='A' if index % 2 == 0 else 'B',
-                    roll=roll,
-                    password_hash='academix123',
-                    academic_year=year,
-                )
-            )
-        Student.objects.bulk_create(extra_students)
-
-        extra_teachers = []
-        departments = ['Mathematics', 'Science', 'English', 'History', 'ICT']
+        departments = ['Mathematics', 'Science', 'English', 'History', 'ICT', 'Bangla', 'Art']
         roles = ['Lecturer', 'Assistant Teacher', 'Senior Teacher']
-        for index in range(20):
-            extra_teachers.append(
+
+        teachers = []
+        for index in range(50):
+            name = teacher_names[index % len(teacher_names)]
+            teachers.append(
                 Teacher(
-                    name=f'Teacher {index + 1}',
+                    name=name,
                     email=f'teacher{index + 1}@academix.com',
-                    phone=f'+880 1700-000{index:02d}',
+                    phone=f'+880 1700-10{index:03d}',
                     department=departments[index % len(departments)],
                     role=roles[index % len(roles)],
                     password_hash='academix123',
                 )
             )
-        Teacher.objects.bulk_create(extra_teachers)
+        Teacher.objects.bulk_create(teachers)
+        teachers = list(Teacher.objects.all())
+
+        student_first_names = [
+            'Ariana', 'Samiya', 'Tahsin', 'Rafi', 'Nafisa', 'Ayaan', 'Sadia', 'Arman', 'Maliha', 'Rafid',
+            'Ishraq', 'Nusaiba', 'Mahin', 'Tasmia', 'Adnan', 'Jahan', 'Faria', 'Sakib', 'Rumana', 'Arafat',
+        ]
+        student_last_names = [
+            'Khan', 'Rahman', 'Ahmed', 'Hossain', 'Islam', 'Chowdhury', 'Sarkar', 'Das', 'Begum', 'Mia',
+        ]
+        class_levels = ['6', '7', '8', '9', '10']
+        sections = ['A', 'B', 'C']
+
+        students = []
+        roll = 1
+        for index in range(200):
+            first = student_first_names[index % len(student_first_names)]
+            last = student_last_names[index % len(student_last_names)]
+            class_level = class_levels[index % len(class_levels)]
+            section = sections[index % len(sections)]
+            students.append(
+                Student(
+                    name=f'{first} {last}',
+                    class_level=class_level,
+                    section=section,
+                    roll=roll,
+                    password_hash='academix123',
+                    academic_year=year,
+                )
+            )
+            roll += 1
+        Student.objects.bulk_create(students)
+        students = list(Student.objects.all())
 
         AdminUser.objects.create(
             name='Admin',
@@ -106,10 +110,71 @@ class Command(BaseCommand):
             password_hash='admin123',
         )
 
+        classrooms = []
+        teacher_index = 0
+        for class_level in class_levels:
+            for section in sections:
+                class_teacher = teachers[teacher_index % len(teachers)]
+                teacher_index += 1
+                classrooms.append(
+                    Classroom(
+                        class_level=class_level,
+                        section=section,
+                        academic_year=year,
+                        class_teacher=class_teacher,
+                    )
+                )
+        Classroom.objects.bulk_create(classrooms)
+        classrooms = list(Classroom.objects.all())
+
+        classroom_subjects = []
+        subject_teacher_index = 0
+        for classroom in classrooms:
+            for subject in subjects:
+                teacher = teachers[subject_teacher_index % len(teachers)]
+                subject_teacher_index += 1
+                classroom_subjects.append(
+                    ClassroomSubject(
+                        classroom=classroom,
+                        subject=subject,
+                        teacher=teacher,
+                    )
+                )
+        ClassroomSubject.objects.bulk_create(classroom_subjects)
+        classroom_subjects = list(ClassroomSubject.objects.all())
+
+        subject_map_by_id = {cs.subject_id: cs for cs in classroom_subjects}
+        math_subject = subjects[0]
+        classroom_subject = subject_map_by_id.get(math_subject.id) or classroom_subjects[0]
+
         exams = [
-            Exam(semester=semester_1, exam_type=Exam.EXAM_TYPE_CLASS_TEST, exam_no=1),
-            Exam(semester=semester_1, exam_type=Exam.EXAM_TYPE_CLASS_TEST, exam_no=2),
-            Exam(semester=semester_1, exam_type=Exam.EXAM_TYPE_SEMESTER_FINAL, exam_no=None),
+            Exam(
+                semester=semester_1,
+                classroom_subject=classroom_subject,
+                exam_type=Exam.EXAM_TYPE_CLASS_TEST,
+                exam_no=1,
+                date=date(2026, 2, 10),
+                start_time=time(9, 0),
+                duration_minutes=60,
+            ),
+            Exam(
+                semester=semester_1,
+                classroom_subject=classroom_subject,
+                exam_type=Exam.EXAM_TYPE_CLASS_TEST,
+                exam_no=2,
+                date=date(2026, 2, 17),
+                start_time=time(9, 0),
+                duration_minutes=60,
+            ),
+            Exam(
+                semester=semester_1,
+                classroom_subject=classroom_subject,
+                exam_type=Exam.EXAM_TYPE_SEMESTER_FINAL,
+                exam_no=None,
+                date=date(2026, 3, 3),
+                start_time=time(10, 0),
+                duration_minutes=120,
+            ),
         ]
         Exam.objects.bulk_create(exams)
         exams = list(Exam.objects.all())
@@ -151,7 +216,7 @@ class Command(BaseCommand):
             [
                 Routine(
                     class_level='7',
-                    section='Boys',
+                    section='A',
                     subject=subject_map['Mathematics'],
                     day_of_week=0,
                     start_time=time(8, 30),
@@ -159,7 +224,7 @@ class Command(BaseCommand):
                 ),
                 Routine(
                     class_level='7',
-                    section='Boys',
+                    section='A',
                     subject=subject_map['Science'],
                     day_of_week=0,
                     start_time=time(9, 25),
@@ -167,7 +232,7 @@ class Command(BaseCommand):
                 ),
                 Routine(
                     class_level='7',
-                    section='Boys',
+                    section='A',
                     subject=subject_map['English'],
                     day_of_week=0,
                     start_time=time(10, 20),

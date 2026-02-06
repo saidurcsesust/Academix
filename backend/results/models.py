@@ -14,3 +14,27 @@ class Result(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.subject} - {self.exam}"
+
+
+class ResultApproval(models.Model):
+    STATUS_PENDING = 'pending'
+    STATUS_APPROVED = 'approved'
+    STATUS_REJECTED = 'rejected'
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Pending'),
+        (STATUS_APPROVED, 'Approved'),
+        (STATUS_REJECTED, 'Rejected'),
+    ]
+
+    exam = models.ForeignKey('exams.Exam', on_delete=models.CASCADE, related_name='approval_requests')
+    teacher = models.ForeignKey('teachers.Teacher', on_delete=models.CASCADE, related_name='result_approvals')
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default=STATUS_PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    approved_at = models.DateTimeField(blank=True, null=True)
+    approved_by = models.ForeignKey('admin_users.AdminUser', on_delete=models.SET_NULL, blank=True, null=True, related_name='approved_results')
+
+    class Meta:
+        unique_together = ('exam', 'teacher')
+
+    def __str__(self):
+        return f"{self.exam} - {self.teacher} ({self.status})"

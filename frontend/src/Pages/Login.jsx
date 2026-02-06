@@ -36,7 +36,7 @@ export default function Login({ onLogin, apiBase = '/api' }) {
       }
 
       const data = await response.json()
-      onLogin('session', data.role)
+      onLogin('session', data.role, data.user)
     } catch (err) {
       setError(err?.message || 'Login failed. Try again.')
     } finally {

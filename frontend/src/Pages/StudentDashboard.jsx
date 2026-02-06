@@ -16,6 +16,7 @@ export default function StudentDashboard({
   nextExam,
   exams,
   results,
+  enrolledSubjects = [],
 }) {
   const latestResult = `${results.exam} • Total ${results.total}`
   const attendanceLabel = attendanceStatus(attendanceStats.percent)
@@ -86,8 +87,36 @@ export default function StudentDashboard({
         </Card>
       </div>
 
-
-
+      <div className="grid-2" style={{ marginTop: '24px' }}>
+        <Card>
+          <CardHeader>
+            <h2>Enrolled Subjects</h2>
+            <a className="text-link" href="/student/exams">View Exams</a>
+          </CardHeader>
+          {enrolledSubjects.length === 0 ? (
+            <p className="empty-state">No subjects assigned yet.</p>
+          ) : (
+            <table className="routine-table admin-table">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Code</th>
+                  <th>Teacher</th>
+                </tr>
+              </thead>
+              <tbody>
+                {enrolledSubjects.map((subject) => (
+                  <tr key={subject.id}>
+                    <td>{subject.subject_name}</td>
+                    <td>{subject.subject_code || '—'}</td>
+                    <td>{subject.teacher_name || '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </Card>
+      </div>
     
     </section>
   )

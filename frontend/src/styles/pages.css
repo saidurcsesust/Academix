@@ -1,7 +1,7 @@
 .exam-grid {
   display: grid;
   gap: 18px;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .exam-card {
@@ -235,6 +235,99 @@
   border-color: rgba(19, 122, 127, 0.45);
   box-shadow: 0 8px 20px rgba(19, 122, 127, 0.18);
   transform: translateY(-1px);
+}
+
+.teacher-top-row {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.teacher-profile-card {
+  min-height: auto;
+}
+
+.teacher-stat-row {
+  margin-top: 6px;
+}
+
+.teacher-stat-line {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.attendance-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.attendance-table {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+}
+.attendance-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.marks-card {
+  max-width: 1320px;
+}
+
+.marks-table {
+  width: min(1320px, 100%);
+}
+
+.marks-table th:nth-child(2),
+.marks-table td:nth-child(2) {
+  min-width: 220px;
+}
+
+.exam-form-card {
+  border-radius: 10px;
+  width: 640px;
+}
+
+
+.attendance-btn {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.attendance-btn.active.present {
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #059669;
+}
+
+.attendance-btn.active.absent {
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #dc2626;
+}
+
+.attendance-btn.active.late {
+  border-color: rgba(245, 158, 11, 0.6);
+  color: #d97706;
+}
+
+.approval-approved {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.6);
+  color: #059669;
+}
+
+.approval-pending {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.6);
+  color: #b45309;
 }
 
 .admin-form-center {
