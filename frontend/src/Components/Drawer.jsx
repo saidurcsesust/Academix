@@ -1,27 +1,49 @@
-import Sidebar from './Sidebar'
+import { useEffect } from 'react'
 
-export default function Drawer({ open, onClose, navItems, currentRoute, student, onLogout }) {
+export default function Drawer({ open, onClose, navItems, currentRoute, onLogout }) {
+  useEffect(() => {
+    if (!open) return undefined
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [open, onClose])
+
+  const getBadge = (label) =>
+    label
+      .split(' ')
+      .map((part) => part[0] || '')
+      .join('')
+      .slice(0, 2)
+      .toUpperCase()
+
   return (
-    <div className={`drawer${open ? ' open' : ''}`} aria-hidden={!open}>
-      <button className="drawer-backdrop" type="button" aria-label="Close navigation" onClick={onClose} />
-      <div className="drawer-panel" role="dialog" aria-modal="true" aria-label="Navigation">
+    <aside className={`drawer${open ? ' open' : ''}`} aria-label="Quick navigation rail">
+      <div className="drawer-panel">
         <div className="drawer-header">
           <p className="drawer-title">Menu</p>
-          <button className="icon-button" type="button" aria-label="Close menu" onClick={onClose}>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6.2 6.2a1 1 0 0 1 1.4 0L12 10.6l4.4-4.4a1 1 0 1 1 1.4 1.4L13.4 12l4.4 4.4a1 1 0 0 1-1.4 1.4L12 13.4l-4.4 4.4a1 1 0 0 1-1.4-1.4L10.6 12 6.2 7.6a1 1 0 0 1 0-1.4Z" />
-            </svg>
+        </div>
+        <nav className="rail-nav" aria-label="Sections">
+          {navItems.map((item) => (
+            <a
+              key={item.path}
+              href={item.path}
+              className={`rail-item${currentRoute === item.path ? ' active' : ''}`}
+              onClick={onClose}
+            >
+              <span className="rail-badge">{getBadge(item.label)}</span>
+              <span className="rail-label">{item.label}</span>
+            </a>
+          ))}
+        </nav>
+        <div className="drawer-footer">
+          <button className="drawer-logout" type="button" onClick={onLogout}>
+            <span className="rail-badge rail-badge-logout">LO</span>
+            <span className="rail-label">Logout</span>
           </button>
         </div>
-        <Sidebar
-          navItems={navItems}
-          currentRoute={currentRoute}
-          student={student}
-          className="drawer-sidebar"
-          onNavigate={onClose}
-          onLogout={onLogout}
-        />
       </div>
-    </div>
+    </aside>
   )
 }

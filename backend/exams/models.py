@@ -19,9 +19,17 @@ class Exam(models.Model):
     )
     exam_type = models.CharField(max_length=20, choices=EXAM_TYPE_CHOICES)
     exam_no = models.PositiveSmallIntegerField(blank=True, null=True)
+    syllabus = models.TextField(blank=True, default='')
     date = models.DateField()
     start_time = models.TimeField()
     duration_minutes = models.PositiveIntegerField(default=90)
+    created_by_admin = models.ForeignKey(
+        'admin_users.AdminUser',
+        on_delete=models.SET_NULL,
+        related_name='created_exams',
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         unique_together = ('semester', 'exam_type', 'exam_no')

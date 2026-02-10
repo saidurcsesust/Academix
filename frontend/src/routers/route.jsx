@@ -4,8 +4,8 @@ import StudentExams from '../Pages/StudentExams'
 import StudentAlumni from '../Pages/Alumni'
 import StudentNotices from '../Pages/StudentNotices'
 import StudentResults from '../Pages/StudentResults'
-import StudentRoutine from '../Pages/StudentRoutine'
 import StudentFaculty from '../Pages/Faculty'
+import ChatSection from '../Pages/ChatSection'
 import Login from '../Pages/Login'
 import AdminDashboard from '../Pages/AdminDashboard'
 import AdminUsers from '../Pages/AdminUsers'
@@ -15,26 +15,28 @@ import AdminUserDetails from '../Pages/AdminUserDetails'
 import AdminClasses from '../Pages/AdminClasses'
 import AdminClassCreate from '../Pages/AdminClassCreate'
 import AdminAssignSubject from '../Pages/AdminAssignSubject'
+import AdminExams from '../Pages/AdminExams'
 import TeacherDashboard from '../Pages/TeacherDashboard'
 import TeacherAttendance from '../Pages/TeacherAttendance'
-import TeacherExams from '../Pages/TeacherExams'
 import TeacherMarks from '../Pages/TeacherMarks'
 import AdminApprovals from '../Pages/AdminApprovals'
 import { attendanceStatus } from '../utils/date'
 
 export const navItems = [
   { label: 'Dashboard', path: '/student/dashboard' },
-  { label: 'Class Routine', path: '/student/routine' },
   { label: 'Attendance', path: '/student/attendance' },
   { label: 'Upcoming Exams', path: '/student/exams' },
   { label: 'Results', path: '/student/results' },
   { label: 'Notices', path: '/student/notices' },
+  { label: 'Chat', path: '/student/chat' },
   { label: 'Faculty', path: '/student/faculty' },
   { label: 'Alumni', path: '/student/alumni' },
 ]
 
 export const adminNavItems = [
   { label: 'Admin Dashboard', path: '/admin/dashboard' },
+  { label: 'Create Exam', path: '/admin/exams' },
+  { label: 'Chats', path: '/admin/chat' },
   { label: 'User Management', path: '/admin/users' },
   { label: 'User Directory', path: '/admin/directory' },
   { label: 'Class Management', path: '/admin/classes' },
@@ -44,7 +46,7 @@ export const adminNavItems = [
 export const teacherNavItems = [
   { label: 'Teacher Dashboard', path: '/teacher/dashboard' },
   { label: 'Attendance', path: '/teacher/attendance' },
-  { label: 'Create Exam', path: '/teacher/exams' },
+  { label: 'Chat', path: '/teacher/chat' },
   { label: 'Enter Marks', path: '/teacher/marks' },
 ]
 
@@ -78,11 +80,9 @@ export function AppRouter({
     '/student/dashboard': (
       <StudentDashboard
         todayLabel={todayLabel}
-        student={student}
         attendanceStats={attendanceStats}
         attendanceStatus={attendanceStatus}
-        weekend={weekend}
-        todayRoutine={todayRoutine}
+        weeklyRoutine={weeklyRoutine}
         notices={notices}
         nextExam={nextExam}
         exams={exams}
@@ -90,15 +90,13 @@ export function AppRouter({
         enrolledSubjects={enrolledSubjects}
       />
     ),
-    '/student/routine': (
-      <StudentRoutine routineItems={routineItems} weeklyRoutine={weeklyRoutine} />
-    ),
     '/student/attendance': (
       <StudentAttendance attendanceStats={attendanceStats} />
     ),
     '/student/exams': <StudentExams exams={exams} />,
     '/student/results': <StudentResults results={resultsBySemester} apiResults={apiResults} />,
     '/student/notices': <StudentNotices notices={notices} />,
+    '/student/chat': <ChatSection apiBase={apiBase} currentRoute={resolvedRoute} userProfile={userProfile} />,
     '/student/faculty': <StudentFaculty faculty={faculty} />,
     '/student/alumni': <StudentAlumni alumni={alumni} />,
     '/admin/dashboard': (
@@ -115,10 +113,12 @@ export function AppRouter({
     '/admin/classes': <AdminClasses apiBase={apiBase} />,
     '/admin/classes/new': <AdminClassCreate apiBase={apiBase} />,
     '/admin/classes/assign': <AdminAssignSubject apiBase={apiBase} />,
+    '/admin/exams': <AdminExams apiBase={apiBase} userProfile={userProfile} />,
     '/admin/approvals': <AdminApprovals apiBase={apiBase} />,
+    '/admin/chat': <ChatSection apiBase={apiBase} currentRoute={resolvedRoute} userProfile={userProfile} />,
     '/teacher/dashboard': <TeacherDashboard apiBase={apiBase} userProfile={userProfile} />,
     '/teacher/attendance': <TeacherAttendance apiBase={apiBase} userProfile={userProfile} />,
-    '/teacher/exams': <TeacherExams apiBase={apiBase} userProfile={userProfile} />,
+    '/teacher/chat': <ChatSection apiBase={apiBase} currentRoute={resolvedRoute} userProfile={userProfile} />,
     '/teacher/marks': <TeacherMarks apiBase={apiBase} userProfile={userProfile} />,
   }
 

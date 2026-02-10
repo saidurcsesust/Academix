@@ -1,4 +1,7 @@
 from rest_framework import viewsets
+from rest_framework.exceptions import ValidationError
+
+from admin_users.models import AdminUser
 
 from classrooms.models import Enrollment
 
@@ -36,3 +39,13 @@ class ExamViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(classroom_subject__teacher_id=teacher_id)
 
         return queryset
+
+    def perform_create(self, serializer):
+        admin_id = self.request.data.get('created_by_admin')
+        if not admin_id:
+            raise ValidationError({'created_by_admin': 'Admin ID is required to create exams.'})
+        try:
+            admin_user = AdminUser.objects.get(id=admin_id)
+        except AdminUser.DoesNotExist as exc:
+            raise ValidationError({'created_by_admin': 'Invalid admin user.'}) from exc
+        serializer.save(created_by_admin=admin_user)

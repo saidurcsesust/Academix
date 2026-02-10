@@ -1,18 +1,23 @@
 :root {
   color-scheme: light;
-  font-family: "Space Grotesk","Trebuchet MS", "Verdana", sans-serif;
+  font-family: "Space Grotesk", "Trebuchet MS", "Verdana", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  --bg: #f7f0e6;
-  --bg-accent: #f0e4d4;
-  --card: #fff8ef;
+  --bg: #fafafa;
+  --bg-accent: #f2f5f9;
+  --card: #ffffff;
+  --card-border: rgba(15, 23, 42, 0.12);
+  --card-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+  --card-shadow-hover: 0 20px 42px rgba(15, 23, 42, 0.16);
+  --bg-glow-1: rgba(19, 122, 127, 0.08);
+  --bg-glow-2: rgba(242, 143, 59, 0.10);
   --text: #1f2a2e;
   --muted: #566369;
   --brand: #137a7f;
   --brand-2: #f28f3b;
-  --app-bg: var(--bg);
+  --app-bg: #fafafa;
   --sidebar-bg: #1f2a2e;
   --text-primary: var(--text);
   --text-muted: var(--muted);
@@ -26,7 +31,8 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(130deg, var(--bg), var(--bg-accent));
+  background-color: var(--bg);
+  background-image: none;
   overflow-x: hidden;
 }
 

@@ -133,7 +133,7 @@ export default function TeacherAttendance({ apiBase = '/api', userProfile }) {
     <section className="page" id="teacher-attendance">
       <PageHeader title="Take Attendance" subtitle="Class teachers can mark daily attendance." />
 
-      <Card className="admin-panel attendance-card">
+      <Card className="admin-panel attendance-card teacher-attendance-card">
         <CardHeader>
           <div>
             <h2>Class Attendance</h2>

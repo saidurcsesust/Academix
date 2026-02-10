@@ -25,7 +25,7 @@
 .brand-subtitle {
   margin: 4px 0 0;
   font-size: 0.8rem;
-  color: rgba(248, 250, 252, 0.7);
+  color: var(--text-muted);
 }
 
 .navbar-links {
@@ -39,8 +39,8 @@
   text-decoration: none;
   padding: 8px 14px;
   border-radius: 999px;
-  background: var(--card);
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  border: 1px solid var(--card-border);
   font-size: 0.9rem;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -52,23 +52,30 @@
 }
 
 .navbar-link.active {
-  background: var(--bg-accent);
-  color: var(--text);
-  border-color: transparent;
+  background: var(--brand);
+  color: #ffffff;
+  border-color: var(--brand);
 }
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 2;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  padding: 14px 24px;
-  background: rgba(255, 248, 239, 0.9);
+  padding: 14px 0;
+  background: #ffffff;
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-  gap: 18px;
+  border-bottom: 1px solid var(--card-border);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+}
+
+.topbar-inner {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0;
 }
 
 .topbar-left {
@@ -110,14 +117,22 @@
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   justify-self: end;
   grid-column: 3;
 }
 
+.topbar .navbar-links {
+  grid-column: 2;
+  justify-content: flex-end;
+  min-width: 0;
+  gap: 8px;
+  margin-right: 5px;
+}
+
 .topbar-student .student-info {
   background: var(--card);
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid var(--card-border);
 }
 
 .topbar-student .student-name,
@@ -136,83 +151,129 @@
 
 .drawer {
   position: fixed;
-  inset: 0;
+  top: 84px;
+  right: 14px;
+  bottom: 14px;
   z-index: 6;
-  opacity: 0;
+  width: 64px;
+  transition: width 0.22s ease;
   pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.drawer.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.drawer-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  border: none;
 }
 
 .drawer-panel {
-  position: absolute;
+  position: relative;
   top: 0;
-  left: 0;
   height: 100%;
-  width: min(280px, 82vw);
-  background: var(--sidebar-bg);
-  transform: translateX(-100%);
-  transition: transform 0.25s ease;
-  box-shadow: 24px 0 48px rgba(15, 23, 42, 0.2);
+  width: 100%;
+  background: rgba(248, 250, 252, 0.74);
+  backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 16px;
+  box-shadow: -14px 10px 34px rgba(15, 23, 42, 0.16);
   display: flex;
   flex-direction: column;
-  padding: 12px 20px;
+  padding: 10px 8px;
+  overflow: hidden;
+  pointer-events: auto;
 }
 
-.drawer.open .drawer-panel {
-  transform: translateX(0);
+.drawer.open {
+  width: min(300px, calc(100vw - 20px));
 }
 
 .drawer-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  color: #fff8ef;
+  justify-content: center;
+  margin-bottom: 10px;
+  color: var(--text);
 }
 
 .drawer-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.drawer.open .drawer-title {
+  opacity: 1;
+}
+
+.rail-nav {
+  display: grid;
+  gap: 8px;
+  overflow: auto;
+  min-height: 0;
+  padding: 0 2px;
+}
+
+.rail-item {
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+  min-height: 44px;
+}
+
+.rail-item:hover {
+  transform: translateY(-1px);
+  border-color: rgba(19, 122, 127, 0.4);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.rail-item.active {
+  border-color: rgba(19, 122, 127, 0.45);
+  background: var(--brand);
+  color: #ffffff;
+}
+
+.rail-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(19, 122, 127, 0.18), rgba(242, 143, 59, 0.2));
+  color: #1f2a2e;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
-.drawer-panel .icon-button {
-  background: rgba(255, 248, 239, 0.16);
+.rail-label {
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-.drawer-sidebar {
-  padding: 0;
-  background: transparent;
-  height: 100%;
-  overflow: auto;
+.drawer.open .rail-label {
+  opacity: 1;
+  transform: translateX(0);
 }
 
-.sidebar-student .student-info {
-  width: 100%;
-  background: rgba(255, 248, 239, 0.12);
-  border-color: rgba(255, 248, 239, 0.2);
-}
-
-.sidebar-student .student-name,
-.sidebar-student .student-meta {
-  color: #fff8ef;
-}
-
-.sidebar-student .pill {
-  background: var(--bg-accent);
-  color: var(--text);
+.drawer-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  display: grid;
+  gap: 8px;
 }
 
 .nav {
@@ -242,18 +303,31 @@
 }
 
 .drawer-logout {
-  align-self: flex-start;
-  color: #fff8ef;
+  color: #ffffff;
   text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: rgba(255, 248, 239, 0.16);
+  width: 100%;
+  min-height: 44px;
+  padding: 7px 8px;
+  border-radius: 12px;
+  background: var(--brand);
+  border: none;
   font-size: 0.9rem;
   font-weight: 600;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.rail-badge-logout {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
 }
 
 .drawer-logout:hover {
-  background: rgba(255, 248, 239, 0.24);
+  background: #106468;
 }
 
 .sidebar-logout {
@@ -268,7 +342,7 @@
   padding: 6px 12px;
   border-radius: 16px;
   background: var(--card);
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid var(--card-border);
 }
 
 .student-name {
@@ -307,6 +381,7 @@
   place-items: center;
   cursor: pointer;
   transition: transform 0.2s ease;
+  border: 1px solid var(--card-border);
 }
 
 .icon-button svg {

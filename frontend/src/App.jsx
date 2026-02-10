@@ -46,6 +46,7 @@ function App() {
   const [enrolledSubjects, setEnrolledSubjects] = useState([])
   const [studentResultsApi, setStudentResultsApi] = useState([])
   const [isAuthenticated, setIsAuthenticated] = useState(Boolean(authToken))
+  const [isCompactNav, setIsCompactNav] = useState(() => window.innerWidth <= 980)
 
   const todayRoutine = isWeekend(today) ? [] : routineItems
   const nextExam = examsData[0]
@@ -101,6 +102,14 @@ function App() {
   }
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsCompactNav(window.innerWidth <= 980)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  useEffect(() => {
     if (!isAuthenticated && currentRoute !== '/login') {
       window.history.replaceState({}, '', '/login')
       setCurrentRoute('/login')
@@ -112,6 +121,11 @@ function App() {
     }
     if (isAuthenticated && currentRoute.startsWith('/teacher') && userRole !== 'teacher') {
       const target = userRole === 'admin' ? '/admin/dashboard' : '/student/dashboard'
+      window.history.replaceState({}, '', target)
+      setCurrentRoute(target)
+    }
+    if (isAuthenticated && userRole === 'teacher' && currentRoute === '/teacher/exams') {
+      const target = '/teacher/dashboard'
       window.history.replaceState({}, '', target)
       setCurrentRoute(target)
     }
@@ -244,7 +258,7 @@ function App() {
                 date: formatDate(new Date(exam.date)),
                 time: formatTime(exam.start_time),
                 subject: exam.subject_name || 'Subject',
-                syllabus: 'See syllabus',
+                syllabus: exam.syllabus || 'See syllabus',
                 room: 'TBD',
                 status: new Date(exam.date) >= today ? 'Upcoming' : 'Done',
               }
@@ -284,9 +298,11 @@ function App() {
     }
 
     loadData()
+    const intervalId = window.setInterval(loadData, 20000)
 
     return () => {
       ignore = true
+      window.clearInterval(intervalId)
     }
   }, [API_BASE, authToken])
 
@@ -294,12 +310,18 @@ function App() {
     return <AppRouter onLogin={handleLogin} apiBase={API_BASE} currentRoute={currentRoute} />
   }
 
+  const activeNavItems = isAdminRoute
+    ? adminNavItems
+    : (currentRoute.startsWith('/teacher') ? teacherNavItems : navItems)
+  const topNavItems = isCompactNav ? [] : activeNavItems.slice(0, 3)
+  const drawerNavItems = isCompactNav ? activeNavItems : activeNavItems.slice(3)
+
   return (
     <div className="app-shell">
       <Drawer
         open={drawerOpen}
         onClose={handleDrawerClose}
-        navItems={isAdminRoute ? adminNavItems : (currentRoute.startsWith('/teacher') ? teacherNavItems : navItems)}
+        navItems={drawerNavItems}
         currentRoute={currentRoute}
         student={studentData}
         onLogout={handleLogout}
@@ -308,8 +330,8 @@ function App() {
         <Navbar
           onMenuClick={handleDrawerToggle}
           isDrawerOpen={drawerOpen}
-          student={studentData}
-          showStudent={!isAdminRoute && !currentRoute.startsWith('/teacher')}
+          navItems={topNavItems}
+          currentRoute={currentRoute}
         />
 
         <main className="content">

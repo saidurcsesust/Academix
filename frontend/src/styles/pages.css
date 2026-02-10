@@ -1,7 +1,7 @@
 .exam-grid {
   display: grid;
   gap: 18px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .exam-card {
@@ -58,42 +58,62 @@
 .alumni-grid {
   display: grid;
   gap: 18px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
 .alumni-card {
   display: grid;
-  gap: 8px;
+  gap: 6px;
+  padding: 10px;
 }
 
 .alumni-header {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  /* gap: 12px; */
   align-items: flex-start;
 }
 
 .alumni-name {
   margin: 0;
   font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.2;
 }
 
 .alumni-meta {
-  margin: 4px 0 0;
+  margin: 2px 0 0;
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
+  line-height: 1.2;
 }
 
 .alumni-detail {
+  display: flex;
   margin: 0;
-  font-size: 0.9rem;
+  gap: 4px;
+  font-size: 0.82rem;
   color: var(--text);
+  line-height: 1.2;
 }
 
 .alumni-contact {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--brand);
+  line-height: 1.2;
+}
+
+.alumni-role {
+  background: linear-gradient(135deg, rgba(19, 122, 127, 0.15), rgba(242, 143, 59, 0.2));
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.alumni-card .pill {
+  padding: 4px 8px;
+  font-size: 0.68rem;
 }
 
 .faculty-grid {
@@ -258,6 +278,36 @@
   color: var(--text);
 }
 
+.teacher-stat-card {
+  min-height: auto;
+}
+
+.teacher-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.teacher-stat-tile {
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.teacher-stat-label {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.teacher-stat-value {
+  margin: 6px 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
 .attendance-actions {
   display: flex;
   gap: 8px;
@@ -272,6 +322,29 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px;
+}
+
+.teacher-attendance-card {
+  max-width: 1320px;
+  padding: 22px;
+}
+
+.teacher-attendance-card .routine-table {
+  width: min(1320px, 100%);
+}
+
+.teacher-attendance-card .routine-table th,
+.teacher-attendance-card .routine-table td {
+  padding: 12px 14px;
+}
+
+.teacher-attendance-card .attendance-actions {
+  gap: 10px;
+}
+
+.teacher-attendance-card .attendance-btn {
+  padding: 6px 10px;
+  font-size: 0.8rem;
 }
 
 .marks-card {
@@ -289,7 +362,7 @@
 
 .exam-form-card {
   border-radius: 10px;
-  width: 640px;
+  width: min(640px, 100%);
 }
 
 
@@ -547,7 +620,7 @@
   min-height: 100vh;
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  background: linear-gradient(120deg, #fff1d6 0%, #f6e7cf 45%, #e8f3f3 100%);
+  background: var(--app-bg);
   color: #1f2a2e;
 }
 
@@ -859,4 +932,124 @@
   width: 36px;
   height: 36px;
   font-weight: 700;
+}
+
+.chat-room-list {
+  display: grid;
+  gap: 10px;
+}
+
+.chat-room-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.chat-room-item.active {
+  border-color: rgba(19, 122, 127, 0.45);
+  background: rgba(19, 122, 127, 0.08);
+}
+
+.chat-room-name {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.chat-room-meta {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.chat-message-list {
+  display: grid;
+  gap: 10px;
+  max-height: 380px;
+  overflow: auto;
+}
+
+.chat-message {
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 10px 12px;
+}
+
+.chat-message-meta {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.chat-message-content {
+  margin: 6px 0 0;
+  color: var(--text);
+}
+
+.chat-form {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-form input {
+  flex: 1;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 9px 10px;
+  font: inherit;
+}
+
+.chat-form-fields {
+  flex: 1;
+  display: grid;
+  gap: 8px;
+}
+
+.chat-file-note {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.chat-attachments {
+  margin-top: 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.chat-attachment-image-link {
+  display: inline-flex;
+  max-width: 220px;
+  text-decoration: none;
+}
+
+.chat-attachment-image {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+}
+
+.chat-attachment-file {
+  text-decoration: none;
+  color: var(--brand);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.chat-room-code {
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.chat-room-code-header {
+  margin: 0 0 10px;
 }
