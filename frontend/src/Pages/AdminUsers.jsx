@@ -3,7 +3,7 @@ import Card from '../Components/Card'
 import CardHeader from '../Components/CardHeader'
 import PageHeader from '../Components/PageHeader'
 
-export default function AdminUsers({ apiBase = '/api' }) {
+export default function AdminUsers({ apiBase = '/api', embedded = false }) {
   const [userType, setUserType] = useState('student')
   const [statusMessage, setStatusMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -83,8 +83,10 @@ export default function AdminUsers({ apiBase = '/api' }) {
   }
 
   return (
-    <section className="page" id="admin-users">
-      <PageHeader title="User Management" subtitle="Create and manage student/teacher accounts." />
+    <section className={embedded ? '' : 'page'} id="admin-users">
+      {!embedded && (
+        <PageHeader title="User Management" subtitle="Create and manage student/teacher accounts." />
+      )}
 
       <div className="grid-2 admin-grid">
         <Card className="admin-panel">
@@ -174,20 +176,6 @@ export default function AdminUsers({ apiBase = '/api' }) {
               {statusMessage && <span className="admin-status">{statusMessage}</span>}
             </div>
           </form>
-        </Card>
-
-        <Card className="admin-panel">
-          <CardHeader>
-            <div>
-              <h2>Quick Tips</h2>
-              <p className="card-note">Follow these when onboarding</p>
-            </div>
-          </CardHeader>
-          <ul className="admin-list">
-            <li>Use a unique roll/email.</li>
-            <li>Set a temporary password and reset later.</li>
-            <li>Verify class/department for reporting accuracy.</li>
-          </ul>
         </Card>
       </div>
     </section>

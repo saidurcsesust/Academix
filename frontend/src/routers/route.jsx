@@ -8,7 +8,6 @@ import StudentFaculty from '../Pages/Faculty'
 import ChatSection from '../Pages/ChatSection'
 import Login from '../Pages/Login'
 import AdminDashboard from '../Pages/AdminDashboard'
-import AdminUsers from '../Pages/AdminUsers'
 import AdminDirectory from '../Pages/AdminDirectory'
 import AdminDirectoryList from '../Pages/AdminDirectoryList'
 import AdminUserDetails from '../Pages/AdminUserDetails'
@@ -36,8 +35,10 @@ export const navItems = [
 export const adminNavItems = [
   { label: 'Admin Dashboard', path: '/admin/dashboard' },
   { label: 'Create Exam', path: '/admin/exams' },
+  { label: 'Notices', path: '/admin/notices' },
+  { label: 'Faculty', path: '/admin/faculty' },
+  { label: 'Alumni', path: '/admin/alumni' },
   { label: 'Chats', path: '/admin/chat' },
-  { label: 'User Management', path: '/admin/users' },
   { label: 'User Directory', path: '/admin/directory' },
   { label: 'Class Management', path: '/admin/classes' },
   { label: 'Approvals', path: '/admin/approvals' },
@@ -46,12 +47,16 @@ export const adminNavItems = [
 export const teacherNavItems = [
   { label: 'Teacher Dashboard', path: '/teacher/dashboard' },
   { label: 'Attendance', path: '/teacher/attendance' },
+  { label: 'Notices', path: '/teacher/notices' },
+  { label: 'Faculty', path: '/teacher/faculty' },
+  { label: 'Alumni', path: '/teacher/alumni' },
   { label: 'Chat', path: '/teacher/chat' },
   { label: 'Enter Marks', path: '/teacher/marks' },
 ]
 
 export function AppRouter({
   attendanceStats,
+  attendanceRecords,
   alumni,
   faculty,
   exams,
@@ -91,7 +96,7 @@ export function AppRouter({
       />
     ),
     '/student/attendance': (
-      <StudentAttendance attendanceStats={attendanceStats} />
+      <StudentAttendance attendanceStats={attendanceStats} attendanceRecords={attendanceRecords} />
     ),
     '/student/exams': <StudentExams exams={exams} />,
     '/student/results': <StudentResults results={resultsBySemester} apiResults={apiResults} />,
@@ -101,6 +106,7 @@ export function AppRouter({
     '/student/alumni': <StudentAlumni alumni={alumni} />,
     '/admin/dashboard': (
       <AdminDashboard
+        todayLabel={todayLabel}
         notices={notices}
         exams={exams}
         faculty={faculty}
@@ -108,16 +114,29 @@ export function AppRouter({
         resultsSummary={resultsSummary}
       />
     ),
-    '/admin/users': <AdminUsers apiBase={apiBase} />,
+    '/admin/users': <AdminDirectory apiBase={apiBase} />,
     '/admin/directory': <AdminDirectory apiBase={apiBase} />,
     '/admin/classes': <AdminClasses apiBase={apiBase} />,
     '/admin/classes/new': <AdminClassCreate apiBase={apiBase} />,
     '/admin/classes/assign': <AdminAssignSubject apiBase={apiBase} />,
     '/admin/exams': <AdminExams apiBase={apiBase} userProfile={userProfile} />,
+    '/admin/notices': <StudentNotices notices={notices} />,
+    '/admin/faculty': <StudentFaculty faculty={faculty} />,
+    '/admin/alumni': <StudentAlumni alumni={alumni} />,
     '/admin/approvals': <AdminApprovals apiBase={apiBase} />,
     '/admin/chat': <ChatSection apiBase={apiBase} currentRoute={resolvedRoute} userProfile={userProfile} />,
-    '/teacher/dashboard': <TeacherDashboard apiBase={apiBase} userProfile={userProfile} />,
+    '/teacher/dashboard': (
+      <TeacherDashboard
+        apiBase={apiBase}
+        userProfile={userProfile}
+        notices={notices}
+        todayLabel={todayLabel}
+      />
+    ),
     '/teacher/attendance': <TeacherAttendance apiBase={apiBase} userProfile={userProfile} />,
+    '/teacher/notices': <StudentNotices notices={notices} />,
+    '/teacher/faculty': <StudentFaculty faculty={faculty} />,
+    '/teacher/alumni': <StudentAlumni alumni={alumni} />,
     '/teacher/chat': <ChatSection apiBase={apiBase} currentRoute={resolvedRoute} userProfile={userProfile} />,
     '/teacher/marks': <TeacherMarks apiBase={apiBase} userProfile={userProfile} />,
   }

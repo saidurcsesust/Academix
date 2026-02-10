@@ -212,40 +212,41 @@ export default function TeacherMarks({ apiBase = '/api', userProfile }) {
           </label>
         </div>
 
-
-        <table className="routine-table admin-table attendance-table marks-table">
-          <thead>
-            <tr>
-              <th>Roll</th>
-              <th>Student</th>
-              <th>Marks</th>
-              <th>Grade</th>
-              <th>Point</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.student_id}>
-                <td>{row.student_roll}</td>
-                <td>{row.student_name}</td>
-                <td>
-                  <input
-                    className="admin-input"
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={row.marksInput}
-                    onChange={(event) => updateRow(row.student_id, event.target.value)}
-                    style={{ width: '90px' }}
-                    disabled={approvalStatus === 'approved'}
-                  />
-                </td>
-                <td>{row.grade || '—'}</td>
-                <td>{row.point ?? '—'}</td>
+        <div className="marks-table-wrap">
+          <table className="routine-table admin-table attendance-table marks-table">
+            <thead>
+              <tr>
+                <th>Roll</th>
+                <th>Student</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Point</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.student_id}>
+                  <td>{row.student_roll}</td>
+                  <td>{row.student_name}</td>
+                  <td>
+                    <input
+                      className="admin-input"
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={row.marksInput}
+                      onChange={(event) => updateRow(row.student_id, event.target.value)}
+                      style={{ width: '90px' }}
+                      disabled={approvalStatus === 'approved'}
+                    />
+                  </td>
+                  <td>{row.grade || '—'}</td>
+                  <td>{row.point ?? '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="admin-form-actions" style={{ marginTop: '16px' }}>
           <button className="primary" type="button" onClick={handleSave} disabled={isSubmitting}>

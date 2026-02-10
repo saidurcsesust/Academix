@@ -2,10 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import Card from '../Components/Card'
 import CardHeader from '../Components/CardHeader'
 import PageHeader from '../Components/PageHeader'
-import SummaryCard from '../Components/SummaryCard'
-import { buildAttendanceDays } from '../utils/date'
 
-export default function StudentAttendance({ attendanceStats }) {
+export default function StudentAttendance({ attendanceStats, attendanceRecords = [] }) {
   const monthOptions = useMemo(
     () => [
       { label: 'Jan', value: 0 },
@@ -24,23 +22,64 @@ export default function StudentAttendance({ attendanceStats }) {
     [],
   )
   const today = new Date()
-  const [selectedMonth, setSelectedMonth] = useState(today.getMonth())
-  const selectedYear = today.getFullYear()
-  const todayKey = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()
-  const calendarDays = useMemo(() => {
-    const days = buildAttendanceDays(new Date(selectedYear, selectedMonth, 1))
-    return days.map((day) => {
-      const dateValue = new Date(selectedYear, selectedMonth, day.label)
-      const isFuture = dateValue.getTime() > todayKey
-      return {
-        ...day,
-        status: isFuture ? 'pending' : day.status,
+  const currentMonth = today.getMonth()
+  const currentYear = today.getFullYear()
+  const currentDate = today.getDate()
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth)
+  const selectedYear = currentYear
+  const todayKey = new Date(currentYear, currentMonth, currentDate).getTime()
+  const recordsByDate = useMemo(() => {
+    const map = new Map()
+    attendanceRecords.forEach((record) => {
+      if (record?.date) {
+        map.set(record.date, record.status || 'pending')
       }
     })
-  }, [selectedMonth, selectedYear, todayKey])
+    return map
+  }, [attendanceRecords])
+
+  const calendarDays = useMemo(() => {
+    const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate()
+    const days = []
+    for (let i = 1; i <= daysInMonth; i += 1) {
+      const dateValue = new Date(selectedYear, selectedMonth, i)
+      const isFuture = dateValue.getTime() > todayKey
+      const dateKey = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`
+      const isWeekend = dateValue.getDay() === 5 || dateValue.getDay() === 6
+      const recordStatus = recordsByDate.get(dateKey)
+      const status = isFuture
+        ? 'pending'
+        : isWeekend
+          ? 'weekend'
+          : (recordStatus || 'pending')
+
+      days.push({
+        label: i,
+        day: dateValue.toLocaleDateString('en-US', { weekday: 'short' }),
+        status,
+        note:
+          status === 'present'
+            ? 'Marked present by class teacher.'
+            : status === 'absent'
+              ? 'Marked absent by class teacher.'
+              : status === 'late'
+                ? 'Marked late by class teacher.'
+                : '',
+      })
+    }
+
+    return days
+  }, [selectedMonth, selectedYear, todayKey, recordsByDate])
   const initialDay = useMemo(
-    () => calendarDays.find((day) => day.status !== 'weekend') || calendarDays[0],
-    [calendarDays],
+    () => {
+      const isCurrentMonth = selectedMonth === currentMonth && selectedYear === currentYear
+      if (isCurrentMonth) {
+        const todayDay = calendarDays.find((day) => day.label === currentDate)
+        if (todayDay) return todayDay
+      }
+      return calendarDays.find((day) => day.status !== 'weekend') || calendarDays[0]
+    },
+    [calendarDays, selectedMonth, selectedYear, currentMonth, currentYear, currentDate],
   )
   const [selectedDay, setSelectedDay] = useState(initialDay)
 
@@ -51,6 +90,7 @@ export default function StudentAttendance({ attendanceStats }) {
   const statusLabel = (status) => {
     if (status === 'present') return 'Present'
     if (status === 'absent') return 'Absent'
+    if (status === 'late') return 'Late'
     if (status === 'pending') return 'Pending'
     return 'Weekend'
   }

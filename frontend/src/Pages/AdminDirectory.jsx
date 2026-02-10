@@ -1,6 +1,7 @@
 import Card from '../Components/Card'
 import CardHeader from '../Components/CardHeader'
 import PageHeader from '../Components/PageHeader'
+import AdminUsers from './AdminUsers'
 
 const directoryCards = [
   {
@@ -15,7 +16,7 @@ const directoryCards = [
   },
 ]
 
-export default function AdminDirectory() {
+export default function AdminDirectory({ apiBase = '/api' }) {
   return (
     <section className="page" id="admin-directory">
       <PageHeader title="User Directory" subtitle="Pick a directory to explore." />
@@ -30,14 +31,10 @@ export default function AdminDirectory() {
               </div>
               <a className="text-link" href={card.href}>Open</a>
             </CardHeader>
-            <div className="admin-directory-cta">
-              <p className="card-note">
-                View profiles, filter results, and open full detail pages.
-              </p>
-            </div>
           </Card>
         ))}
       </div>
+      <AdminUsers apiBase={apiBase} embedded />
     </section>
   )
 }

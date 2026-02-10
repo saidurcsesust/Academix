@@ -3,7 +3,12 @@ import Card from '../Components/Card'
 import CardHeader from '../Components/CardHeader'
 import PageHeader from '../Components/PageHeader'
 
-export default function TeacherDashboard({ apiBase = '/api', userProfile }) {
+export default function TeacherDashboard({
+  apiBase = '/api',
+  userProfile,
+  notices = [],
+  todayLabel,
+}) {
   const [teacher, setTeacher] = useState(userProfile || null)
   const [assignments, setAssignments] = useState([])
   const [classrooms, setClassrooms] = useState([])
@@ -80,6 +85,13 @@ export default function TeacherDashboard({ apiBase = '/api', userProfile }) {
   const myClassrooms = useMemo(() => (
     classrooms.filter((classroom) => myClassroomIds.includes(classroom.id))
   ), [classrooms, myClassroomIds])
+  const homeroomClassroomIds = useMemo(() => (
+    new Set(
+      classrooms
+        .filter((classroom) => Number(classroom.class_teacher) === Number(teacherId))
+        .map((classroom) => classroom.id),
+    )
+  ), [classrooms, teacherId])
 
   const statCards = [
     { label: 'Subjects', value: myAssignments.length },
@@ -96,12 +108,24 @@ export default function TeacherDashboard({ apiBase = '/api', userProfile }) {
       .sort((a, b) => new Date(a.date) - new Date(b.date))
       .slice(0, 6)
   ), [teacherExams])
+  const latestNotice = notices.length ? notices[0] : null
 
   return (
     <section className="page" id="teacher-dashboard">
       <PageHeader
         title="Teacher Dashboard"
-        subtitle="Track your classes, subjects, and homeroom responsibilities."
+        subtitle={`${todayLabel}`}
+        actions={latestNotice ? (
+          <div className="notice-marquee-wrap">
+            <div className="notice-marquee" aria-label="Latest notice">
+              <span className="notice-marquee-track" aria-live="polite">
+                <span className="notice-marquee-text">
+                  {latestNotice.title} — {latestNotice.preview}
+                </span>
+              </span>
+            </div>
+          </div>
+        ) : null}
       />
 
       <div className="teacher-top-row">
@@ -140,40 +164,7 @@ export default function TeacherDashboard({ apiBase = '/api', userProfile }) {
         <Card className="admin-panel">
           <CardHeader>
             <div>
-              <h2>My Classes</h2>
-              <p className="card-note">Classes where you teach or act as class teacher.</p>
-            </div>
-          </CardHeader>
-          {status === 'error' ? (
-            <p className="card-note">Failed to load classes.</p>
-          ) : (
-            <table className="routine-table admin-table">
-              <thead>
-                <tr>
-                  <th>Class</th>
-                  <th>Section</th>
-                  <th>Year</th>
-                  <th>Students</th>
-                </tr>
-              </thead>
-              <tbody>
-                {myClassrooms.map((classroom) => (
-                  <tr key={classroom.id}>
-                    <td>{classroom.class_level}</td>
-                    <td>{classroom.section}</td>
-                    <td>{classroom.academic_year_label || '—'}</td>
-                    <td>{classroom.student_count ?? 0}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </Card>
-        <Card className="admin-panel">
-          <CardHeader>
-            <div>
               <h2>Assigned Subjects</h2>
-              <p className="card-note">Subject mappings for your classes.</p>
             </div>
           </CardHeader>
           {status === 'error' ? (
@@ -188,9 +179,19 @@ export default function TeacherDashboard({ apiBase = '/api', userProfile }) {
               </thead>
               <tbody>
                 {myAssignments.map((assignment) => (
-                  <tr key={assignment.id}>
+                  <tr
+                    key={assignment.id}
+                    className={homeroomClassroomIds.has(assignment.classroom) ? 'class-teacher-subject-row' : ''}
+                  >
                     <td>{assignment.classroom_label}</td>
-                    <td>{assignment.subject_name}</td>
+                    <td>
+                      <div className="subject-cell">
+                        <span className="subject-cell-text">{assignment.subject_name}</span>
+                        {homeroomClassroomIds.has(assignment.classroom) ? (
+                          <span className="ct-tag" title="Class Teacher">CT</span>
+                        ) : null}
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

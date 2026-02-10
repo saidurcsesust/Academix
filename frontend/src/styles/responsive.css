@@ -252,6 +252,13 @@
     display: none;
   }
 
+  .approvals-table th:nth-child(4),
+  .approvals-table td:nth-child(4),
+  .approvals-table th:nth-child(5),
+  .approvals-table td:nth-child(5) {
+    display: table-cell;
+  }
+
   .routine-cards {
     display: flex;
   }
@@ -268,7 +275,7 @@
     top: 70px;
     right: 8px;
     bottom: 8px;
-    width: 56px;
+    width: 0;
   }
 
   .drawer.open {
@@ -294,6 +301,39 @@
   .drawer-logout {
     padding: 8px 10px;
     font-size: 0.85rem;
+  }
+
+  .marks-card {
+    padding: 14px;
+  }
+
+  .marks-table-wrap {
+    overflow-x: hidden;
+  }
+
+  .marks-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .marks-table th,
+  .marks-table td {
+    font-size: 0.78rem;
+    padding: 8px 6px;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .marks-table .admin-input {
+    width: 64px !important;
+    padding: 6px 8px;
+    font-size: 0.78rem;
+  }
+
+  .marks-table th:nth-child(2),
+  .marks-table td:nth-child(2) {
+    min-width: 0;
+    width: auto;
   }
 
   .notice-marquee {

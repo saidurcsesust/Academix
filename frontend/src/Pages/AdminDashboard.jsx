@@ -4,12 +4,14 @@ import PageHeader from '../Components/PageHeader'
 import SummaryCard from '../Components/SummaryCard'
 
 export default function AdminDashboard({
+  todayLabel,
   notices = [],
   exams = [],
   faculty = [],
   attendanceStats,
   resultsSummary,
 }) {
+  const latestNotice = notices.length ? notices[0] : null
   const upcomingExams = exams.slice(0, 5)
   const recentNotices = notices.slice(0, 5)
   const totalFaculty = faculty.length
@@ -20,7 +22,19 @@ export default function AdminDashboard({
     <section className="page" id="admin-dashboard">
       <PageHeader
         title="Admin Dashboard"
-        subtitle="Monitor academics, staff, and notices across the campus."
+        subtitle={`${todayLabel}`}
+        actions={latestNotice ? (
+          <div className="notice-marquee-wrap">
+            <div className="notice-marquee" aria-label="Latest notice">
+              {/* <span className="notice-marquee-label">Notice</span> */}
+              <span className="notice-marquee-track" aria-live="polite">
+                <span className="notice-marquee-text">
+                  {latestNotice.title} — {latestNotice.preview}
+                </span>
+              </span>
+            </div>
+          </div>
+        ) : null}
       />
 
       <div className="summary-grid four">

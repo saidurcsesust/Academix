@@ -20,7 +20,6 @@ export default function StudentAlumni({ alumni }) {
     <section className="page alumni-page" id="alumni">
       <PageHeader
         title="Alumni Network"
-        subtitle="Connect with alumni mentors."
         actions={(
           <div className="filter-row">
             <select

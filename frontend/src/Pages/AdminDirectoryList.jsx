@@ -87,6 +87,7 @@ export default function AdminDirectoryList({ apiBase = '/api' }) {
   return (
     <section className="page" id="admin-directory-list">
       <PageHeader title={title} subtitle={subtitle} />
+      <a className="text-link" href="/admin/directory">Back to User Directory</a>
 
       <div className="admin-directory-center">
         <Card className="admin-panel admin-directory-panel admin-directory-panel--list">

@@ -155,8 +155,10 @@
   right: 14px;
   bottom: 14px;
   z-index: 6;
-  width: 64px;
-  transition: width 0.22s ease;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: width 0.22s ease, opacity 0.22s ease;
   pointer-events: none;
 }
 
@@ -174,11 +176,22 @@
   flex-direction: column;
   padding: 10px 8px;
   overflow: hidden;
-  pointer-events: auto;
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.22s ease, opacity 0.22s ease;
 }
 
 .drawer.open {
   width: min(300px, calc(100vw - 20px));
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer.open .drawer-panel {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .drawer-header {

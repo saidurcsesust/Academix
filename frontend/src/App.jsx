@@ -43,6 +43,7 @@ function App() {
   const [examsData, setExamsData] = useState(exams)
   const [noticesData, setNoticesData] = useState(notices)
   const [attendanceData, setAttendanceData] = useState(attendanceBySemester)
+  const [studentAttendanceRecords, setStudentAttendanceRecords] = useState([])
   const [enrolledSubjects, setEnrolledSubjects] = useState([])
   const [studentResultsApi, setStudentResultsApi] = useState([])
   const [isAuthenticated, setIsAuthenticated] = useState(Boolean(authToken))
@@ -287,8 +288,13 @@ function App() {
           setStudentResultsApi(resultList)
         }
 
-        if (Array.isArray(attendanceRecords) && attendanceRecords.length) {
-          setAttendanceData(computeAttendanceBySemester(attendanceRecords))
+        if (Array.isArray(attendanceRecords)) {
+          setStudentAttendanceRecords(attendanceRecords)
+          if (attendanceRecords.length) {
+            setAttendanceData(computeAttendanceBySemester(attendanceRecords))
+          } else {
+            setAttendanceData(attendanceBySemester)
+          }
         }
       } catch (error) {
         if (!ignore) {
@@ -337,6 +343,7 @@ function App() {
         <main className="content">
           <AppRouter
             attendanceStats={attendanceStats}
+            attendanceRecords={studentAttendanceRecords}
             alumni={alumni}
             faculty={faculty}
             notices={noticesData}

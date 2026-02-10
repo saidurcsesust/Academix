@@ -62,32 +62,34 @@ export default function AdminApprovals({ apiBase = '/api' }) {
 
         {statusMessage && <p className="card-note">{statusMessage}</p>}
 
-        <table className="routine-table admin-table">
-          <thead>
-            <tr>
-              <th>Class</th>
-              <th>Subject</th>
-              <th>Teacher</th>
-              <th>Status</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {approvals.map((approval) => (
-              <tr key={approval.id}>
-                <td>{approval.class_label || '—'}</td>
-                <td>{approval.subject_name || '—'}</td>
-                <td>{approval.teacher_name || '—'}</td>
-                <td>{approval.status}</td>
-                <td>
-                  <button className="primary" type="button" onClick={() => handleApprove(approval.id)}>
-                    Approve
-                  </button>
-                </td>
+        <div className="approvals-table-wrap">
+          <table className="routine-table admin-table approvals-table">
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+                <th>Status</th>
+                <th />
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {approvals.map((approval) => (
+                <tr key={approval.id}>
+                  <td>{approval.class_label || '—'}</td>
+                  <td>{approval.subject_name || '—'}</td>
+                  <td>{approval.teacher_name || '—'}</td>
+                  <td>{approval.status}</td>
+                  <td>
+                    <button className="primary" type="button" onClick={() => handleApprove(approval.id)}>
+                      Approve
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Card>
     </section>
   )

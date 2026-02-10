@@ -6,7 +6,6 @@ export default function StudentFaculty({ faculty }) {
     <section className="page" id="faculty">
       <PageHeader
         title="Faculty Directory"
-        subtitle="Reach out to teachers and check their office hours."
       />
 
       <div className="faculty-grid">
