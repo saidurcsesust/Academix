@@ -1,16 +1,54 @@
-# React + Vite
+# Academix Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite frontend for Academix dashboards.
 
-Currently, two official plugins are available:
+## Stack
+- React `19`
+- Vite `7`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Prerequisites
+- Node.js `18+`
+- npm
 
-## React Compiler
+## Setup
+Run from the `frontend/` directory.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Frontend runs at `http://127.0.0.1:5173`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Backend Connection
+Default API base in app code:
+- `VITE_API_BASE` if provided
+- otherwise `/api`
+
+Development proxy is configured in `vite.config.js`:
+- `/api` -> `http://127.0.0.1:8000`
+
+This means local development works out of the box when backend is running on port `8000`.
+
+## Optional Environment Variable
+Create `frontend/.env` if your backend is hosted elsewhere:
+
+```env
+VITE_API_BASE=http://127.0.0.1:8000/api
+```
+
+## Available Scripts
+- `npm run dev` start development server
+- `npm run build` create production build
+- `npm run preview` preview production build locally
+- `npm run lint` run ESLint
+
+## Main Routes
+- Student: `/student/dashboard`, `/student/attendance`, `/student/exams`, `/student/results`, `/student/notices`, `/student/chat`
+- Teacher: `/teacher/dashboard`, `/teacher/attendance`, `/teacher/marks`, `/teacher/chat`
+- Admin: `/admin/dashboard`, `/admin/classes`, `/admin/exams`, `/admin/directory`, `/admin/approvals`, `/admin/chat`
+- Login: `/login`
+
+## Notes
+- Auth state is currently stored in localStorage (`academix_session`, `academix_role`, `academix_user`).
+- Role-based navigation and page guards are handled client-side in `src/App.jsx`.
